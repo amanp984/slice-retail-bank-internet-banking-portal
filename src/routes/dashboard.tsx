@@ -113,7 +113,7 @@ function Dashboard() {
           <p className="text-xs text-muted-foreground mt-1 mb-4">Select account and period to download your statement</p>
           <label className="text-xs text-muted-foreground">Account</label>
           <select className="w-full mt-1 mb-3 px-3 py-2 rounded-lg border border-border text-sm bg-white">
-            <option>Savings Account - XXXX XXXX 1234</option>
+            <option>Current Account - XXXX XXXX 1234</option>
           </select>
           <label className="text-xs text-muted-foreground">Select Period</label>
           <select className="w-full mt-1 mb-4 px-3 py-2 rounded-lg border border-border text-sm bg-white">
