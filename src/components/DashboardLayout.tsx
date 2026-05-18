@@ -66,8 +66,8 @@ export function DashboardLayout({
         </div>
       </aside>
 
-      <main className="flex-1 ml-[260px]">
-        <header className="px-10 pt-7 pb-4 flex items-start justify-between gap-6">
+      <main className="flex-1 ml-[220px]">
+        <header className="px-8 pt-7 pb-4 flex items-start justify-between gap-6">
           <div>
             {showGreeting && (
               <>
