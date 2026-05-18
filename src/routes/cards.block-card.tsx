@@ -95,7 +95,7 @@ function BlockCard() {
             <p className="text-xs text-muted-foreground mt-1">A 6-digit OTP has been sent to your registered mobile ending with •••• 4521</p>
             <div className="mt-3 flex gap-2.5" onPaste={onPaste}>
               {otp.map((v, i) => (
-                <input key={i} ref={(el) => (refs.current[i] = el)} inputMode="numeric" maxLength={1}
+                <input key={i} ref={(el) => { refs.current[i] = el; }} inputMode="numeric" maxLength={1}
                   value={v}
                   onChange={(e) => setDigit(i, e.target.value)}
                   onKeyDown={(e) => { if (e.key === "Backspace" && !otp[i] && i > 0) refs.current[i - 1]?.focus(); }}
