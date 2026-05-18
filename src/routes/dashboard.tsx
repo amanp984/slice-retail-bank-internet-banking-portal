@@ -2,9 +2,11 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { motion } from "framer-motion";
 import {
-  ArrowLeftRight, Receipt, ConciergeBell, Download, Eye,
+  ArrowLeftRight, Receipt, ConciergeBell, Download, Eye, EyeOff,
   FileText, FileSpreadsheet, FileType, MonitorPlay, Users, FileCheck2, Settings, ShieldCheck, Landmark
 } from "lucide-react";
+import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -34,31 +36,43 @@ const txns = [
 const fmt = (n: number) => new Intl.NumberFormat("en-IN", { minimumFractionDigits: 2 }).format(Math.abs(n));
 
 function Dashboard() {
+  const [show, setShow] = useState(true);
   return (
     <DashboardLayout showGreeting>
       <div className="grid grid-cols-12 gap-5">
         {/* Balance card */}
-        <motion.div whileHover={{ y: -2 }} className="col-span-12 lg:col-span-5 bg-card-gradient rounded-2xl p-6 text-white relative overflow-hidden shadow-card">
-          <Landmark className="absolute right-6 top-6 w-28 h-28 text-white/10" />
-          <div className="flex items-center gap-2 text-sm">
-            <span>Current Account</span>
-            <span className="px-2 py-0.5 rounded-full bg-white/15 text-[10px] font-semibold">Primary Account</span>
+        <motion.div whileHover={{ y: -2 }} className="col-span-12 lg:col-span-4 bg-card-gradient rounded-2xl p-5 text-white relative overflow-hidden shadow-card">
+          <Landmark className="absolute -right-2 -top-2 w-20 h-20 text-white/10" />
+          <div className="flex items-center gap-2 text-xs">
+            <span className="font-medium">Current Account</span>
+            <span className="px-1.5 py-0.5 rounded-full bg-white/15 text-[9px] font-semibold">Primary</span>
           </div>
-          <div className="text-xs opacity-80 mt-1">XXXX XXXX 1234</div>
-          <div className="mt-6 text-xs opacity-90">Available Balance</div>
-          <div className="flex items-center gap-2 mt-1">
-            <span className="text-3xl font-bold">₹1,25,680<span className="text-lg">.50</span></span>
-            <Eye className="w-4 h-4 opacity-80" />
+          <div className="text-[11px] opacity-80 mt-0.5">XXXX XXXX 1234</div>
+          <div className="mt-4 text-[11px] opacity-90">Available Balance</div>
+          <div className="flex items-center gap-2 mt-0.5 h-9">
+            <AnimatePresence mode="wait" initial={false}>
+              {show ? (
+                <motion.span key="v" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={{ duration: 0.18 }}
+                  className="text-2xl font-bold tabular-nums">₹1,25,680<span className="text-sm">.50</span></motion.span>
+              ) : (
+                <motion.span key="h" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={{ duration: 0.18 }}
+                  className="text-2xl font-bold tracking-widest">₹ ••••••••</motion.span>
+              )}
+            </AnimatePresence>
+            <button onClick={() => setShow((s) => !s)} aria-label={show ? "Hide balance" : "Show balance"}
+              className="p-1 rounded-md hover:bg-white/15 transition active:scale-95">
+              {show ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+            </button>
           </div>
-          <div className="grid grid-cols-2 gap-4 mt-5 text-xs">
-            <div><div className="opacity-80">Total Balance</div><div className="font-semibold text-base">₹1,25,680.50</div></div>
-            <div><div className="opacity-80">Uncleared Funds</div><div className="font-semibold text-base">₹0.00</div></div>
+          <div className="grid grid-cols-2 gap-3 mt-3 text-[11px]">
+            <div><div className="opacity-80">Total Balance</div><div className="font-semibold text-sm">{show ? "₹1,25,680.50" : "₹ ••••••"}</div></div>
+            <div><div className="opacity-80">Uncleared</div><div className="font-semibold text-sm">{show ? "₹0.00" : "₹ ••••"}</div></div>
           </div>
-          <button className="mt-5 px-4 py-2 rounded-lg bg-white text-primary text-sm font-semibold hover:bg-white/90">View Account Details</button>
+          <Link to="/accounts" className="inline-block mt-4 px-3.5 py-1.5 rounded-lg bg-white text-primary text-xs font-semibold hover:bg-white/90 transition active:scale-[0.98] shadow-sm">View Account Details</Link>
         </motion.div>
 
         {/* Quick actions */}
-        <div className="col-span-12 lg:col-span-7 grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="col-span-12 lg:col-span-8 grid grid-cols-2 lg:grid-cols-4 gap-4">
           {quick.map((q) => (
             <motion.div key={q.title} whileHover={{ y: -3 }}
               className="bg-card rounded-2xl p-5 shadow-card border border-border text-center">
