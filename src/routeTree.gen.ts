@@ -19,8 +19,12 @@ import { Route as CardsRouteImport } from './routes/cards'
 import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TransfersIndexRouteImport } from './routes/transfers.index'
+import { Route as PaymentsIndexRouteImport } from './routes/payments.index'
+import { Route as CardsIndexRouteImport } from './routes/cards.index'
 import { Route as TransfersTransferlimitRouteImport } from './routes/transfers.transferlimit'
 import { Route as TransfersManagebeneficiariesRouteImport } from './routes/transfers.managebeneficiaries'
+import { Route as PaymentsCategoryRouteImport } from './routes/payments.$category'
+import { Route as CardsBlockCardRouteImport } from './routes/cards.block-card'
 
 const TransfersRoute = TransfersRouteImport.update({
   id: '/transfers',
@@ -72,6 +76,16 @@ const TransfersIndexRoute = TransfersIndexRouteImport.update({
   path: '/',
   getParentRoute: () => TransfersRoute,
 } as any)
+const PaymentsIndexRoute = PaymentsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PaymentsRoute,
+} as any)
+const CardsIndexRoute = CardsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CardsRoute,
+} as any)
 const TransfersTransferlimitRoute = TransfersTransferlimitRouteImport.update({
   id: '/transferlimit',
   path: '/transferlimit',
@@ -83,47 +97,67 @@ const TransfersManagebeneficiariesRoute =
     path: '/managebeneficiaries',
     getParentRoute: () => TransfersRoute,
   } as any)
+const PaymentsCategoryRoute = PaymentsCategoryRouteImport.update({
+  id: '/$category',
+  path: '/$category',
+  getParentRoute: () => PaymentsRoute,
+} as any)
+const CardsBlockCardRoute = CardsBlockCardRouteImport.update({
+  id: '/block-card',
+  path: '/block-card',
+  getParentRoute: () => CardsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/accounts': typeof AccountsRoute
-  '/cards': typeof CardsRoute
+  '/cards': typeof CardsRouteWithChildren
   '/dashboard': typeof DashboardRoute
   '/help': typeof HelpRoute
   '/offers': typeof OffersRoute
-  '/payments': typeof PaymentsRoute
+  '/payments': typeof PaymentsRouteWithChildren
   '/profile': typeof ProfileRoute
   '/transfers': typeof TransfersRouteWithChildren
+  '/cards/block-card': typeof CardsBlockCardRoute
+  '/payments/$category': typeof PaymentsCategoryRoute
   '/transfers/managebeneficiaries': typeof TransfersManagebeneficiariesRoute
   '/transfers/transferlimit': typeof TransfersTransferlimitRoute
+  '/cards/': typeof CardsIndexRoute
+  '/payments/': typeof PaymentsIndexRoute
   '/transfers/': typeof TransfersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accounts': typeof AccountsRoute
-  '/cards': typeof CardsRoute
   '/dashboard': typeof DashboardRoute
   '/help': typeof HelpRoute
   '/offers': typeof OffersRoute
-  '/payments': typeof PaymentsRoute
   '/profile': typeof ProfileRoute
+  '/cards/block-card': typeof CardsBlockCardRoute
+  '/payments/$category': typeof PaymentsCategoryRoute
   '/transfers/managebeneficiaries': typeof TransfersManagebeneficiariesRoute
   '/transfers/transferlimit': typeof TransfersTransferlimitRoute
+  '/cards': typeof CardsIndexRoute
+  '/payments': typeof PaymentsIndexRoute
   '/transfers': typeof TransfersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/accounts': typeof AccountsRoute
-  '/cards': typeof CardsRoute
+  '/cards': typeof CardsRouteWithChildren
   '/dashboard': typeof DashboardRoute
   '/help': typeof HelpRoute
   '/offers': typeof OffersRoute
-  '/payments': typeof PaymentsRoute
+  '/payments': typeof PaymentsRouteWithChildren
   '/profile': typeof ProfileRoute
   '/transfers': typeof TransfersRouteWithChildren
+  '/cards/block-card': typeof CardsBlockCardRoute
+  '/payments/$category': typeof PaymentsCategoryRoute
   '/transfers/managebeneficiaries': typeof TransfersManagebeneficiariesRoute
   '/transfers/transferlimit': typeof TransfersTransferlimitRoute
+  '/cards/': typeof CardsIndexRoute
+  '/payments/': typeof PaymentsIndexRoute
   '/transfers/': typeof TransfersIndexRoute
 }
 export interface FileRouteTypes {
@@ -138,21 +172,27 @@ export interface FileRouteTypes {
     | '/payments'
     | '/profile'
     | '/transfers'
+    | '/cards/block-card'
+    | '/payments/$category'
     | '/transfers/managebeneficiaries'
     | '/transfers/transferlimit'
+    | '/cards/'
+    | '/payments/'
     | '/transfers/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/accounts'
-    | '/cards'
     | '/dashboard'
     | '/help'
     | '/offers'
-    | '/payments'
     | '/profile'
+    | '/cards/block-card'
+    | '/payments/$category'
     | '/transfers/managebeneficiaries'
     | '/transfers/transferlimit'
+    | '/cards'
+    | '/payments'
     | '/transfers'
   id:
     | '__root__'
@@ -165,19 +205,23 @@ export interface FileRouteTypes {
     | '/payments'
     | '/profile'
     | '/transfers'
+    | '/cards/block-card'
+    | '/payments/$category'
     | '/transfers/managebeneficiaries'
     | '/transfers/transferlimit'
+    | '/cards/'
+    | '/payments/'
     | '/transfers/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountsRoute: typeof AccountsRoute
-  CardsRoute: typeof CardsRoute
+  CardsRoute: typeof CardsRouteWithChildren
   DashboardRoute: typeof DashboardRoute
   HelpRoute: typeof HelpRoute
   OffersRoute: typeof OffersRoute
-  PaymentsRoute: typeof PaymentsRoute
+  PaymentsRoute: typeof PaymentsRouteWithChildren
   ProfileRoute: typeof ProfileRoute
   TransfersRoute: typeof TransfersRouteWithChildren
 }
@@ -254,6 +298,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TransfersIndexRouteImport
       parentRoute: typeof TransfersRoute
     }
+    '/payments/': {
+      id: '/payments/'
+      path: '/'
+      fullPath: '/payments/'
+      preLoaderRoute: typeof PaymentsIndexRouteImport
+      parentRoute: typeof PaymentsRoute
+    }
+    '/cards/': {
+      id: '/cards/'
+      path: '/'
+      fullPath: '/cards/'
+      preLoaderRoute: typeof CardsIndexRouteImport
+      parentRoute: typeof CardsRoute
+    }
     '/transfers/transferlimit': {
       id: '/transfers/transferlimit'
       path: '/transferlimit'
@@ -268,8 +326,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TransfersManagebeneficiariesRouteImport
       parentRoute: typeof TransfersRoute
     }
+    '/payments/$category': {
+      id: '/payments/$category'
+      path: '/$category'
+      fullPath: '/payments/$category'
+      preLoaderRoute: typeof PaymentsCategoryRouteImport
+      parentRoute: typeof PaymentsRoute
+    }
+    '/cards/block-card': {
+      id: '/cards/block-card'
+      path: '/block-card'
+      fullPath: '/cards/block-card'
+      preLoaderRoute: typeof CardsBlockCardRouteImport
+      parentRoute: typeof CardsRoute
+    }
   }
 }
+
+interface CardsRouteChildren {
+  CardsBlockCardRoute: typeof CardsBlockCardRoute
+  CardsIndexRoute: typeof CardsIndexRoute
+}
+
+const CardsRouteChildren: CardsRouteChildren = {
+  CardsBlockCardRoute: CardsBlockCardRoute,
+  CardsIndexRoute: CardsIndexRoute,
+}
+
+const CardsRouteWithChildren = CardsRoute._addFileChildren(CardsRouteChildren)
+
+interface PaymentsRouteChildren {
+  PaymentsCategoryRoute: typeof PaymentsCategoryRoute
+  PaymentsIndexRoute: typeof PaymentsIndexRoute
+}
+
+const PaymentsRouteChildren: PaymentsRouteChildren = {
+  PaymentsCategoryRoute: PaymentsCategoryRoute,
+  PaymentsIndexRoute: PaymentsIndexRoute,
+}
+
+const PaymentsRouteWithChildren = PaymentsRoute._addFileChildren(
+  PaymentsRouteChildren,
+)
 
 interface TransfersRouteChildren {
   TransfersManagebeneficiariesRoute: typeof TransfersManagebeneficiariesRoute
@@ -290,11 +388,11 @@ const TransfersRouteWithChildren = TransfersRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountsRoute: AccountsRoute,
-  CardsRoute: CardsRoute,
+  CardsRoute: CardsRouteWithChildren,
   DashboardRoute: DashboardRoute,
   HelpRoute: HelpRoute,
   OffersRoute: OffersRoute,
-  PaymentsRoute: PaymentsRoute,
+  PaymentsRoute: PaymentsRouteWithChildren,
   ProfileRoute: ProfileRoute,
   TransfersRoute: TransfersRouteWithChildren,
 }
