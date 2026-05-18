@@ -53,7 +53,7 @@ function Payments() {
               </div>
               <h3 className="font-semibold text-sm">{c.title}</h3>
               <p className="text-xs text-muted-foreground mt-2 leading-relaxed">{c.desc}</p>
-              <button className="mt-3 text-xs font-semibold text-primary hover:underline">Pay Now →</button>
+              <Link to="/payments/$category" params={{ category: c.slug }} className="mt-3 inline-block text-xs font-semibold text-primary hover:underline">Pay Now →</Link>
             </motion.div>
           ))}
 

@@ -23,6 +23,7 @@ import { Route as PaymentsIndexRouteImport } from './routes/payments.index'
 import { Route as CardsIndexRouteImport } from './routes/cards.index'
 import { Route as TransfersTransferlimitRouteImport } from './routes/transfers.transferlimit'
 import { Route as TransfersManagebeneficiariesRouteImport } from './routes/transfers.managebeneficiaries'
+import { Route as PaymentsCategoryRouteImport } from './routes/payments.$category'
 import { Route as CardsBlockCardRouteImport } from './routes/cards.block-card'
 
 const TransfersRoute = TransfersRouteImport.update({
@@ -96,6 +97,11 @@ const TransfersManagebeneficiariesRoute =
     path: '/managebeneficiaries',
     getParentRoute: () => TransfersRoute,
   } as any)
+const PaymentsCategoryRoute = PaymentsCategoryRouteImport.update({
+  id: '/$category',
+  path: '/$category',
+  getParentRoute: () => PaymentsRoute,
+} as any)
 const CardsBlockCardRoute = CardsBlockCardRouteImport.update({
   id: '/block-card',
   path: '/block-card',
@@ -113,6 +119,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/transfers': typeof TransfersRouteWithChildren
   '/cards/block-card': typeof CardsBlockCardRoute
+  '/payments/$category': typeof PaymentsCategoryRoute
   '/transfers/managebeneficiaries': typeof TransfersManagebeneficiariesRoute
   '/transfers/transferlimit': typeof TransfersTransferlimitRoute
   '/cards/': typeof CardsIndexRoute
@@ -127,6 +134,7 @@ export interface FileRoutesByTo {
   '/offers': typeof OffersRoute
   '/profile': typeof ProfileRoute
   '/cards/block-card': typeof CardsBlockCardRoute
+  '/payments/$category': typeof PaymentsCategoryRoute
   '/transfers/managebeneficiaries': typeof TransfersManagebeneficiariesRoute
   '/transfers/transferlimit': typeof TransfersTransferlimitRoute
   '/cards': typeof CardsIndexRoute
@@ -145,6 +153,7 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/transfers': typeof TransfersRouteWithChildren
   '/cards/block-card': typeof CardsBlockCardRoute
+  '/payments/$category': typeof PaymentsCategoryRoute
   '/transfers/managebeneficiaries': typeof TransfersManagebeneficiariesRoute
   '/transfers/transferlimit': typeof TransfersTransferlimitRoute
   '/cards/': typeof CardsIndexRoute
@@ -164,6 +173,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/transfers'
     | '/cards/block-card'
+    | '/payments/$category'
     | '/transfers/managebeneficiaries'
     | '/transfers/transferlimit'
     | '/cards/'
@@ -178,6 +188,7 @@ export interface FileRouteTypes {
     | '/offers'
     | '/profile'
     | '/cards/block-card'
+    | '/payments/$category'
     | '/transfers/managebeneficiaries'
     | '/transfers/transferlimit'
     | '/cards'
@@ -195,6 +206,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/transfers'
     | '/cards/block-card'
+    | '/payments/$category'
     | '/transfers/managebeneficiaries'
     | '/transfers/transferlimit'
     | '/cards/'
@@ -314,6 +326,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TransfersManagebeneficiariesRouteImport
       parentRoute: typeof TransfersRoute
     }
+    '/payments/$category': {
+      id: '/payments/$category'
+      path: '/$category'
+      fullPath: '/payments/$category'
+      preLoaderRoute: typeof PaymentsCategoryRouteImport
+      parentRoute: typeof PaymentsRoute
+    }
     '/cards/block-card': {
       id: '/cards/block-card'
       path: '/block-card'
@@ -337,10 +356,12 @@ const CardsRouteChildren: CardsRouteChildren = {
 const CardsRouteWithChildren = CardsRoute._addFileChildren(CardsRouteChildren)
 
 interface PaymentsRouteChildren {
+  PaymentsCategoryRoute: typeof PaymentsCategoryRoute
   PaymentsIndexRoute: typeof PaymentsIndexRoute
 }
 
 const PaymentsRouteChildren: PaymentsRouteChildren = {
+  PaymentsCategoryRoute: PaymentsCategoryRoute,
   PaymentsIndexRoute: PaymentsIndexRoute,
 }
 
@@ -378,3 +399,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
