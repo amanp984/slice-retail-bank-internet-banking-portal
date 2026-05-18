@@ -74,12 +74,12 @@ function Cards() {
           <div className="bg-card rounded-2xl p-6 shadow-card border border-border">
             <h3 className="font-bold">Need Help?</h3>
             <p className="text-xs text-muted-foreground mt-2 leading-relaxed">If your card is lost or stolen, block it immediately.</p>
-            <button className="w-full mt-4 py-2.5 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:brightness-110 transition flex items-center justify-center gap-2">
+            <Link to="/cards/block-card" className="w-full mt-4 py-2.5 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:brightness-110 transition flex items-center justify-center gap-2 active:scale-[0.98]">
               <ShieldCheck className="w-4 h-4" /> Block My Card
-            </button>
-            <button className="w-full mt-2 py-2.5 rounded-lg border border-border text-sm font-semibold hover:bg-accent/40 transition flex items-center justify-center gap-2">
+            </Link>
+            <Link to="/help" className="w-full mt-2 py-2.5 rounded-lg border border-border text-sm font-semibold hover:bg-accent/40 transition flex items-center justify-center gap-2">
               <Headphones className="w-4 h-4 text-primary" /> Report an Issue
-            </button>
+            </Link>
           </div>
         </div>
 

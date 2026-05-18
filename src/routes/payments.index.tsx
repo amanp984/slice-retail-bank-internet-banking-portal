@@ -3,7 +3,7 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { motion } from "framer-motion";
 import { Zap, Shield, Smartphone, Home, CreditCard, Droplet, Flame, History, Users, Bookmark, Repeat, Info, FileCheck2 } from "lucide-react";
 
-export const Route = createFileRoute("/payments")({
+export const Route = createFileRoute("/payments/")({
   head: () => ({
     meta: [
       { title: "Payments — Slice Bank" },
