@@ -145,7 +145,7 @@ function Dashboard() {
               ["Account Type", "Current Account"],
               ["Account Number", "XXXX XXXX 1234"],
               ["IFSC Code", "SLBK0001234"],
-              ["Branch", "Bangalore - Main Branch"],
+              ["Branch", "Mumbai - Corporate Branch"],
             ].map(([k, v]) => (
               <div key={k}>
                 <div className="text-xs text-muted-foreground">{k}</div>
