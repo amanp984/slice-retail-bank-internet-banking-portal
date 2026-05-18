@@ -72,14 +72,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "Slice" },
+      { name: "description", content: "Slice Finance Hub is a modern, responsive internet banking web application." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "Slice" },
+      { property: "og:description", content: "Slice Finance Hub is a modern, responsive internet banking web application." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Slice" },
+      { name: "twitter:description", content: "Slice Finance Hub is a modern, responsive internet banking web application." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/5b8fac56-2a0d-46bd-9ab9-8a442884b3ae/id-preview-692b045b--766ab071-43fd-429a-9ed1-91b3bcc83eb1.lovable.app-1779132292791.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/5b8fac56-2a0d-46bd-9ab9-8a442884b3ae/id-preview-692b045b--766ab071-43fd-429a-9ed1-91b3bcc83eb1.lovable.app-1779132292791.png" },
     ],
     links: [
       {
