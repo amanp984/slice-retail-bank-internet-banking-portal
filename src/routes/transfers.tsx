@@ -25,7 +25,7 @@ const recent = [
   { date: "21 May 2024, 10:45 AM", method: "IMPS", name: "Rajesh Kumar", acct: "XXXX XXXX 7890", ifsc: "SBIN0001234", amount: 5000 },
   { date: "20 May 2024, 04:30 PM", method: "NEFT", name: "Amit Verma", acct: "XXXX XXXX 4567", ifsc: "HDFC0009876", amount: 25000 },
   { date: "19 May 2024, 11:20 AM", method: "RTGS", name: "Global Enterprises", acct: "XXXX XXXX 1122", ifsc: "ICIC0001122", amount: 150000 },
-  { date: "18 May 2024, 02:15 PM", method: "FAME", name: "Rahul Savings", acct: "XXXX XXXX 1234", ifsc: "(Within Slice Bank)", amount: 10000 },
+  { date: "18 May 2024, 02:15 PM", method: "FAME", name: "Rambabu Current", acct: "XXXX XXXX 1234", ifsc: "(Within Slice Bank)", amount: 10000 },
 ];
 
 const tagColor: Record<string, string> = {
