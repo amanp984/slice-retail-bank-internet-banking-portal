@@ -41,7 +41,7 @@ function Dashboard() {
         <motion.div whileHover={{ y: -2 }} className="col-span-12 lg:col-span-5 bg-card-gradient rounded-2xl p-6 text-white relative overflow-hidden shadow-card">
           <Landmark className="absolute right-6 top-6 w-28 h-28 text-white/10" />
           <div className="flex items-center gap-2 text-sm">
-            <span>Savings Account</span>
+            <span>Current Account</span>
             <span className="px-2 py-0.5 rounded-full bg-white/15 text-[10px] font-semibold">Primary Account</span>
           </div>
           <div className="text-xs opacity-80 mt-1">XXXX XXXX 1234</div>
@@ -113,7 +113,7 @@ function Dashboard() {
           <p className="text-xs text-muted-foreground mt-1 mb-4">Select account and period to download your statement</p>
           <label className="text-xs text-muted-foreground">Account</label>
           <select className="w-full mt-1 mb-3 px-3 py-2 rounded-lg border border-border text-sm bg-white">
-            <option>Savings Account - XXXX XXXX 1234</option>
+            <option>Current Account - XXXX XXXX 1234</option>
           </select>
           <label className="text-xs text-muted-foreground">Select Period</label>
           <select className="w-full mt-1 mb-4 px-3 py-2 rounded-lg border border-border text-sm bg-white">
@@ -142,10 +142,10 @@ function Dashboard() {
           <h2 className="font-bold text-foreground mb-4">Account Summary</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             {[
-              ["Account Type", "Savings Account"],
+              ["Account Type", "Current Account"],
               ["Account Number", "XXXX XXXX 1234"],
               ["IFSC Code", "SLBK0001234"],
-              ["Branch", "Bangalore - Main Branch"],
+              ["Branch", "Mumbai - Corporate Branch"],
             ].map(([k, v]) => (
               <div key={k}>
                 <div className="text-xs text-muted-foreground">{k}</div>

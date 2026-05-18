@@ -19,7 +19,7 @@ const info = [
   { i: IdCard, k: "PAN Card Number", v: "ABCDE1234F" },
   { i: MapPin, k: "Permanent Address", v: "123, MG Road, Bengaluru,\nKarnataka - 560001" },
   { i: Building, k: "Bank Address", v: "Slice Bank, 6th Floor, Tower 1,\nOne World Centre, Senapati Bapat Marg,\nLower Parel, Mumbai - 400013" },
-  { i: Building, k: "Branch Address", v: "Slice Bank, Bangalore - Main Branch,\nNo. 45, Residency Road,\nBengaluru, Karnataka - 560025" },
+  { i: Building, k: "Branch Address", v: "Slice Bank, Mumbai - Corporate Branch,\nTower A, BKC,\nMumbai, Maharashtra - 400051" },
 ];
 
 function Profile() {
@@ -39,7 +39,7 @@ function Profile() {
             <div className="flex items-center gap-5 pb-6 border-b border-border">
               <div className="w-20 h-20 rounded-full bg-accent text-primary grid place-items-center text-2xl font-bold">RS</div>
               <div>
-                <div className="text-lg font-bold">Rahul Sharma</div>
+                <div className="text-lg font-bold">Rambabu</div>
                 <div className="text-sm text-muted-foreground">Customer ID: CUST12345678</div>
               </div>
             </div>
