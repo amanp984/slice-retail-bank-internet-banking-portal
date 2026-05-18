@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { motion } from "framer-motion";
 import { Wifi, ShoppingBag, ShoppingCart, Store, Banknote, UtensilsCrossed, ShieldCheck, Headphones } from "lucide-react";
