@@ -142,7 +142,7 @@ function Dashboard() {
           <h2 className="font-bold text-foreground mb-4">Account Summary</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             {[
-              ["Account Type", "Savings Account"],
+              ["Account Type", "Current Account"],
               ["Account Number", "XXXX XXXX 1234"],
               ["IFSC Code", "SLBK0001234"],
               ["Branch", "Bangalore - Main Branch"],
