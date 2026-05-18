@@ -1,133 +1,181 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { motion } from "framer-motion";
-import { Landmark, Zap, Clock, Building2, Users, BarChart3, History, Download, ShieldCheck, Info } from "lucide-react";
+import {
+  Landmark, Zap, Clock, ChevronDown, Plus, User, Users, History,
+  BarChart3, Download, Info, ShieldCheck,
+} from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/transfers")({
   head: () => ({
     meta: [
-      { title: "Transfers — Slice Bank" },
-      { name: "description", content: "Send money securely via NEFT, IMPS, RTGS or FAME with Slice Bank." },
+      { title: "Payment Transfer — Slice Bank" },
+      { name: "description", content: "Transfer money securely via IMPS, NEFT or RTGS with Slice Bank." },
     ],
   }),
-  component: Transfers,
+  component: TransfersPage,
 });
 
-const methods = [
-  { key: "NEFT", icon: Landmark, desc: "Transfer funds to any bank account using NEFT service. Ideal for non-urgent transactions." },
-  { key: "IMPS", icon: Zap, desc: "Instant 24x7 fund transfer using IMPS. Available immediate, 24x7 including holidays." },
-  { key: "RTGS", icon: Clock, desc: "Real-time gross settlement for high value transactions. Available during banking hours." },
-  { key: "FAME", icon: Building2, desc: "Fast and secure transfer within Slice Bank accounts. Instant and hassle-free transfers." },
+const modes = [
+  { key: "IMPS", icon: Zap, sub: "Instant Transfer (24x7)" },
+  { key: "NEFT", icon: Landmark, sub: "Standard Transfer" },
+  { key: "RTGS", icon: Clock, sub: "High Value Transfer" },
 ];
 
-const recent = [
-  { date: "21 May 2024, 10:45 AM", method: "IMPS", name: "Rajesh Kumar", acct: "XXXX XXXX 7890", ifsc: "SBIN0001234", amount: 5000 },
-  { date: "20 May 2024, 04:30 PM", method: "NEFT", name: "Amit Verma", acct: "XXXX XXXX 4567", ifsc: "HDFC0009876", amount: 25000 },
-  { date: "19 May 2024, 11:20 AM", method: "RTGS", name: "Global Enterprises", acct: "XXXX XXXX 1122", ifsc: "ICIC0001122", amount: 150000 },
-  { date: "18 May 2024, 02:15 PM", method: "FAME", name: "Rambabu Current", acct: "XXXX XXXX 1234", ifsc: "(Within Slice Bank)", amount: 10000 },
-];
+function TransfersPage() {
+  const [mode, setMode] = useState("IMPS");
+  const [amount, setAmount] = useState("");
+  const [remarks, setRemarks] = useState("");
 
-const tagColor: Record<string, string> = {
-  IMPS: "bg-green-100 text-green-700", NEFT: "bg-purple-100 text-purple-700",
-  RTGS: "bg-blue-100 text-blue-700", FAME: "bg-amber-100 text-amber-700",
-};
+  const onReview = () => {
+    if (!amount) return toast.error("Please enter an amount");
+    toast.success("Transfer initiated — awaiting OTP verification");
+  };
 
-function Transfers() {
-  const [tab, setTab] = useState("NEFT");
   return (
-    <DashboardLayout showGreeting>
-      <h1 className="text-2xl font-bold">Transfers</h1>
-      <p className="text-sm text-muted-foreground mt-1 mb-6">Choose a transfer method to send money securely</p>
+    <DashboardLayout showGreeting={false}>
+      <h1 className="text-2xl font-bold">Payment Transfer</h1>
+      <p className="text-sm text-muted-foreground mt-1 mb-6">Transfer money securely to another account</p>
 
       <div className="grid grid-cols-12 gap-5">
         <div className="col-span-12 lg:col-span-8 space-y-5">
-          <div className="bg-card rounded-2xl border border-border shadow-card">
-            <div className="flex border-b border-border">
-              {methods.map((m) => (
-                <button key={m.key} onClick={() => setTab(m.key)}
-                  className={`flex-1 py-4 text-sm font-semibold transition relative ${tab === m.key ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}>
-                  {m.key}
-                  {tab === m.key && <motion.div layoutId="tabline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />}
-                </button>
-              ))}
+          <div className="bg-card rounded-2xl border border-border shadow-sm p-6 space-y-6">
+            {/* From Account */}
+            <div>
+              <label className="text-sm font-semibold text-foreground">From Account</label>
+              <div className="mt-2 flex items-center gap-4 p-4 rounded-xl border border-border hover:border-primary/40 transition cursor-pointer">
+                <div className="w-11 h-11 rounded-full bg-accent text-primary grid place-items-center">
+                  <Landmark className="w-5 h-5" />
+                </div>
+                <div className="flex-1">
+                  <div className="font-semibold text-sm">Current Account</div>
+                  <div className="text-xs text-muted-foreground mt-0.5">XXXX XXXX 5678</div>
+                </div>
+                <div className="text-right">
+                  <div className="text-xs text-muted-foreground">Available Balance</div>
+                  <div className="font-semibold">₹1,24,560.00</div>
+                </div>
+                <ChevronDown className="w-4 h-4 text-muted-foreground" />
+              </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-5">
-              {methods.map((m) => (
-                <motion.div key={m.key} whileHover={{ y: -3 }}
-                  className={`p-5 rounded-xl border text-center transition ${tab === m.key ? "border-primary/40 bg-accent/40" : "border-border bg-card"}`}>
-                  <div className="mx-auto w-12 h-12 rounded-full bg-accent text-primary grid place-items-center mb-3">
-                    <m.icon className="w-5 h-5" />
+
+            {/* Beneficiary */}
+            <div>
+              <label className="text-sm font-semibold text-foreground">Select Beneficiary</label>
+              <div className="mt-2 grid grid-cols-[1fr_auto] gap-3">
+                <button className="flex items-center gap-3 p-3.5 rounded-xl border border-border hover:border-primary/40 transition text-left">
+                  <div className="w-10 h-10 rounded-full bg-accent text-primary grid place-items-center">
+                    <User className="w-4 h-4" />
                   </div>
-                  <h3 className="font-semibold text-sm">{m.key}</h3>
-                  <p className="text-xs text-muted-foreground mt-2 leading-relaxed">{m.desc}</p>
-                  <button className="mt-3 text-xs font-semibold text-primary hover:underline">Transfer Now →</button>
-                </motion.div>
-              ))}
+                  <div className="flex-1">
+                    <div className="text-sm font-medium">Select Beneficiary</div>
+                    <div className="text-xs text-muted-foreground">Choose a saved beneficiary</div>
+                  </div>
+                  <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                </button>
+                <Link to="/transfers/managebeneficiaries"
+                  className="px-4 rounded-xl border border-primary text-primary text-sm font-semibold hover:bg-accent transition flex items-center gap-1">
+                  <Plus className="w-4 h-4" /> Add New Beneficiary
+                </Link>
+              </div>
+            </div>
+
+            {/* Amount */}
+            <div>
+              <label className="text-sm font-semibold text-foreground">Amount (₹)</label>
+              <input value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^0-9.]/g, ""))}
+                placeholder="Enter Amount"
+                className="mt-2 w-full p-3.5 rounded-xl border border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm" />
+              <div className="flex justify-between mt-1.5 text-xs text-muted-foreground">
+                <span>Min: ₹1.00 &nbsp;&nbsp; Max: ₹1,00,000.00</span>
+                <span>Transaction Limit: ₹1,00,000.00</span>
+              </div>
+            </div>
+
+            {/* Payment Mode */}
+            <div>
+              <label className="text-sm font-semibold text-foreground">Payment Mode</label>
+              <div className="mt-2 grid grid-cols-1 md:grid-cols-3 gap-3">
+                {modes.map((m) => {
+                  const active = mode === m.key;
+                  return (
+                    <motion.button key={m.key} whileHover={{ y: -2 }} onClick={() => setMode(m.key)}
+                      className={`flex items-center gap-3 p-4 rounded-xl border-2 transition text-left
+                        ${active ? "border-primary bg-accent/40" : "border-border hover:border-primary/30"}`}>
+                      <div className={`w-5 h-5 rounded-full border-2 grid place-items-center
+                        ${active ? "border-primary" : "border-border"}`}>
+                        {active && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
+                      </div>
+                      <div className="w-9 h-9 rounded-full bg-accent text-primary grid place-items-center">
+                        <m.icon className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="font-semibold text-sm">{m.key}</div>
+                        <div className="text-xs text-muted-foreground">{m.sub}</div>
+                      </div>
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Remarks */}
+            <div>
+              <label className="text-sm font-semibold text-foreground">Transaction Remarks (Optional)</label>
+              <input value={remarks} onChange={(e) => setRemarks(e.target.value.slice(0, 40))}
+                placeholder="Enter transaction remarks"
+                className="mt-2 w-full p-3.5 rounded-xl border border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm" />
+              <div className="flex justify-between mt-1.5 text-xs text-muted-foreground">
+                <span>Max 40 characters</span>
+                <span>{remarks.length}/40</span>
+              </div>
+            </div>
+
+            <div className="flex justify-end">
+              <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={onReview}
+                className="px-7 py-3 rounded-xl bg-primary text-primary-foreground font-semibold text-sm shadow-md hover:shadow-lg transition">
+                Review & Confirm
+              </motion.button>
             </div>
           </div>
 
-          <div className="bg-card rounded-2xl p-6 shadow-card border border-border">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-bold">Recent Transfers</h2>
-              <a className="text-sm font-semibold text-primary cursor-pointer">View All</a>
-            </div>
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-xs text-muted-foreground border-b border-border">
-                  <th className="text-left font-medium pb-2">Date & Time</th>
-                  <th className="text-left font-medium pb-2">Method</th>
-                  <th className="text-left font-medium pb-2">Beneficiary</th>
-                  <th className="text-left font-medium pb-2">Account / IFSC</th>
-                  <th className="text-right font-medium pb-2">Amount (₹)</th>
-                  <th className="text-right font-medium pb-2">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recent.map((r, i) => (
-                  <tr key={i} className="border-b border-border/60 last:border-0 hover:bg-secondary/30">
-                    <td className="py-3">{r.date}</td>
-                    <td className="py-3"><span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${tagColor[r.method]}`}>{r.method}</span></td>
-                    <td className="py-3">{r.name}</td>
-                    <td className="py-3 text-xs"><div>{r.acct}</div><div className="text-muted-foreground">{r.ifsc}</div></td>
-                    <td className="py-3 text-right text-foreground">{new Intl.NumberFormat("en-IN", { minimumFractionDigits: 2 }).format(r.amount)}</td>
-                    <td className="py-3 text-right"><span className="px-2 py-0.5 rounded bg-green-100 text-green-700 text-[10px] font-semibold">Successful</span></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="bg-accent/40 border border-accent rounded-xl p-4 flex items-center gap-3">
+            <Info className="w-5 h-5 text-primary shrink-0" />
+            <p className="text-xs text-foreground">Ensure all details are correct before proceeding with the payment transfer.</p>
           </div>
-          <p className="text-xs text-muted-foreground">Slice Bank Internet Banking is safe, secure and easy to use. Do not share your password, OTP or card details with anyone.</p>
+          <p className="text-xs text-muted-foreground text-center">Slice Bank Internet Banking is safe, secure and easy to use. Do not share your password, OTP or card details with anyone.</p>
         </div>
 
+        {/* Right column */}
         <div className="col-span-12 lg:col-span-4 space-y-5">
-          <div className="bg-card rounded-2xl p-6 shadow-card border border-border">
-            <h3 className="font-bold mb-3">Quick Actions</h3>
+          <div className="bg-card rounded-2xl border border-border shadow-sm p-5">
+            <h3 className="font-bold mb-2">Quick Actions</h3>
             <ul className="divide-y divide-border">
-              {[{i: Users, l: "Manage Beneficiaries"}, {i: BarChart3, l: "View Transfer Limits"}, {i: History, l: "Transaction History"}, {i: Download, l: "Download Statement"}].map(({i: I, l}) => (
-                <li key={l} className="flex items-center justify-between py-3 text-sm cursor-pointer hover:text-primary">
-                  <span className="flex items-center gap-3"><I className="w-4 h-4 text-primary" /> {l}</span>
-                  <span className="text-muted-foreground">›</span>
+              {[
+                { i: Users, l: "Manage Beneficiaries", to: "/transfers/managebeneficiaries" },
+                { i: History, l: "Transaction History", to: "/transfers" },
+                { i: BarChart3, l: "Transfer Limits", to: "/transfers/transferlimit" },
+                { i: Download, l: "Download Statement", to: "/transfers" },
+              ].map(({ i: I, l, to }) => (
+                <li key={l}>
+                  <Link to={to} className="flex items-center justify-between py-3 text-sm hover:text-primary transition">
+                    <span className="flex items-center gap-3"><I className="w-4 h-4 text-primary" /> {l}</span>
+                    <span className="text-muted-foreground">›</span>
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div className="rounded-2xl p-6 border border-accent bg-accent/40">
-            <div className="flex items-start justify-between">
-              <div>
-                <h3 className="font-bold text-primary">Transfer Limits</h3>
-                <p className="text-xs text-muted-foreground mt-2 leading-relaxed">Set and manage your daily transfer limits for secure banking.</p>
-                <button className="mt-3 text-xs font-semibold text-primary hover:underline">Manage Limits →</button>
-              </div>
-              <ShieldCheck className="w-10 h-10 text-primary/70" />
+          <div className="bg-accent/30 border border-accent rounded-2xl p-5">
+            <div className="flex items-center gap-2 mb-2">
+              <Info className="w-4 h-4 text-primary" />
+              <h3 className="font-bold">Important Note</h3>
             </div>
-          </div>
-
-          <div className="bg-card rounded-2xl p-6 shadow-card border border-border">
-            <h3 className="font-bold flex items-center gap-2"><Info className="w-4 h-4 text-primary" /> Important Note</h3>
-            <p className="text-xs text-muted-foreground mt-2 leading-relaxed">Ensure correct account details before initiating any transfer. Transactions once processed cannot be cancelled.</p>
-            <button className="mt-3 text-xs font-semibold text-primary hover:underline">Know More →</button>
+            <p className="text-xs text-muted-foreground leading-relaxed">Ensure all transfer details are verified before processing the transaction.</p>
+            <button className="mt-3 text-xs font-semibold text-primary hover:underline inline-flex items-center gap-1">Know More →</button>
           </div>
         </div>
       </div>
