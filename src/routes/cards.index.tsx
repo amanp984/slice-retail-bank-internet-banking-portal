@@ -3,7 +3,7 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { motion } from "framer-motion";
 import { Wifi, ShoppingBag, ShoppingCart, Store, Banknote, UtensilsCrossed, ShieldCheck, Headphones } from "lucide-react";
 
-export const Route = createFileRoute("/cards")({
+export const Route = createFileRoute("/cards/")({
   head: () => ({
     meta: [
       { title: "My Cards — Slice Bank" },
