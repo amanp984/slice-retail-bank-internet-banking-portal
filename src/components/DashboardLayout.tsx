@@ -32,7 +32,7 @@ export function DashboardLayout({
 
   return (
     <div className="min-h-screen flex bg-background">
-      <aside className="w-[260px] bg-sidebar-gradient text-white flex flex-col fixed inset-y-0 left-0 z-30">
+      <aside className="w-[220px] bg-sidebar-gradient text-white flex flex-col fixed inset-y-0 left-0 z-30">
         <div className="px-6 py-7">
           <div className="text-3xl font-bold tracking-tight italic">slice</div>
           <div className="text-xs tracking-[0.3em] font-semibold opacity-90 mt-0.5">BANK</div>
