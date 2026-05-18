@@ -91,7 +91,8 @@ export function DashboardLayout({
           </div>
         </header>
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}
-          className="px-10 pb-10">
+          className="px-8 pb-10">
+
           {children}
         </motion.div>
       </main>
