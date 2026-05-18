@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { RestrictionModal } from "@/components/RestrictionModal";
 import { motion, AnimatePresence } from "framer-motion";
@@ -72,11 +72,11 @@ const accountData = {
   },
 };
 
-const quickActions = [
+const quickActions: { icon: any; label: string; to?: string }[] = [
   { icon: FileText, label: "View Account Statement" },
   { icon: Download, label: "Download Statement" },
-  { icon: Users, label: "Manage Beneficiaries" },
-  { icon: Gauge, label: "Account Limits" },
+  { icon: Users, label: "Manage Beneficiaries", to: "/transfers/managebeneficiaries" },
+  { icon: Gauge, label: "Account Limits", to: "/transfers/transferlimit" },
 ];
 
 function AccountsPage() {
@@ -201,21 +201,24 @@ function AccountsPage() {
             <div className="bg-card rounded-2xl border border-border shadow-sm p-5">
               <div className="font-bold text-foreground mb-2">Quick Actions</div>
               <div className="divide-y divide-border">
-                {quickActions.map(({ icon: Icon, label }) => (
-                  <button
-                    key={label}
-                    onClick={() => showToast(`${label} — feature unavailable in demo`)}
-                    className="w-full flex items-center justify-between py-3 text-sm group transition hover:translate-x-0.5"
-                  >
-                    <span className="flex items-center gap-3">
-                      <span className="w-8 h-8 rounded-lg bg-accent grid place-items-center">
-                        <Icon className="w-4 h-4 text-primary" />
+                {quickActions.map(({ icon: Icon, label, to }) => {
+                  const inner = (
+                    <span className="w-full flex items-center justify-between py-3 text-sm group transition hover:translate-x-0.5">
+                      <span className="flex items-center gap-3">
+                        <span className="w-8 h-8 rounded-lg bg-accent grid place-items-center">
+                          <Icon className="w-4 h-4 text-primary" />
+                        </span>
+                        <span className="text-foreground font-medium">{label}</span>
                       </span>
-                      <span className="text-foreground font-medium">{label}</span>
+                      <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition" />
                     </span>
-                    <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition" />
-                  </button>
-                ))}
+                  );
+                  return to ? (
+                    <Link key={label} to={to} className="block">{inner}</Link>
+                  ) : (
+                    <button key={label} onClick={() => showToast(`${label} — feature unavailable in demo`)} className="w-full text-left">{inner}</button>
+                  );
+                })}
               </div>
             </div>
 

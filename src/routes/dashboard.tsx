@@ -1,12 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeftRight, Receipt, ConciergeBell, Download, Eye, EyeOff,
-  FileText, FileSpreadsheet, FileType, MonitorPlay, Users, FileCheck2, Settings, ShieldCheck, Landmark
+  FileText, FileSpreadsheet, FileType, MonitorPlay, Users, FileCheck2, Settings, ShieldCheck, Landmark, X, Info
 } from "lucide-react";
 import { useState } from "react";
-import { AnimatePresence } from "framer-motion";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -171,21 +170,71 @@ function Dashboard() {
 
         <div className="col-span-12 lg:col-span-4 bg-card rounded-2xl p-6 shadow-card border border-border">
           <h2 className="font-bold text-foreground mb-3">Quick Links</h2>
-          <ul className="divide-y divide-border">
-            {[
-              { icon: Users, label: "Manage Beneficiaries" },
-              { icon: FileCheck2, label: "View Cheque Status" },
-              { icon: ConciergeBell, label: "Service Requests" },
-              { icon: Settings, label: "Debit Card Controls" },
-            ].map(({ icon: I, label }) => (
-              <li key={label} className="flex items-center justify-between py-3 cursor-pointer hover:text-primary text-sm">
-                <span className="flex items-center gap-3"><I className="w-4 h-4 text-primary" /> {label}</span>
-                <span className="text-muted-foreground">›</span>
-              </li>
-            ))}
-          </ul>
+          <QuickLinks />
         </div>
       </div>
     </DashboardLayout>
+  );
+}
+
+function QuickLinks() {
+  const [chequeOpen, setChequeOpen] = useState(false);
+  const items: { icon: any; label: string; to?: string; action?: () => void }[] = [
+    { icon: Users, label: "Manage Beneficiaries", to: "/transfers/managebeneficiaries" },
+    { icon: FileCheck2, label: "View Cheque Status", action: () => setChequeOpen(true) },
+    { icon: ConciergeBell, label: "Service Request", to: "/help" },
+    { icon: Settings, label: "Debit Card Controls", to: "/cards" },
+  ];
+  return (
+    <>
+      <ul className="divide-y divide-border">
+        {items.map(({ icon: I, label, to, action }) => {
+          const inner = (
+            <span className="w-full flex items-center justify-between py-3 hover:text-primary text-sm transition group">
+              <span className="flex items-center gap-3"><I className="w-4 h-4 text-primary" /> {label}</span>
+              <span className="text-muted-foreground group-hover:translate-x-0.5 transition">›</span>
+            </span>
+          );
+          return (
+            <li key={label}>
+              {to ? <Link to={to} className="block">{inner}</Link> : <button onClick={action} className="w-full text-left">{inner}</button>}
+            </li>
+          );
+        })}
+      </ul>
+
+      <AnimatePresence>
+        {chequeOpen && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-foreground/40 backdrop-blur-sm grid place-items-center px-4"
+            onClick={() => setChequeOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.96, opacity: 0, y: 8 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.97, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 380, damping: 30 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-card rounded-2xl shadow-2xl border border-border max-w-md w-full overflow-hidden"
+            >
+              <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-secondary/30">
+                <h3 className="font-bold text-foreground flex items-center gap-2"><FileCheck2 className="w-5 h-5 text-primary" /> Cheque Status</h3>
+                <button onClick={() => setChequeOpen(false)} className="p-1 hover:bg-secondary rounded-md"><X className="w-4 h-4" /></button>
+              </div>
+              <div className="p-6 text-center">
+                <div className="w-14 h-14 mx-auto rounded-full bg-accent grid place-items-center mb-3">
+                  <Info className="w-6 h-6 text-primary" />
+                </div>
+                <h4 className="font-bold text-foreground">No checkbook issued yet.</h4>
+                <p className="text-sm text-muted-foreground mt-2">You haven't requested a chequebook on your account. Request one anytime via the service requests center.</p>
+                <div className="mt-6 flex justify-center gap-3">
+                  <button onClick={() => setChequeOpen(false)} className="px-4 py-2 rounded-lg border border-border text-sm font-semibold hover:bg-secondary">Close</button>
+                  <Link to="/help" className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:brightness-110">Request Chequebook</Link>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
