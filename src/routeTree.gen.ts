@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TransfersRouteImport } from './routes/transfers'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PaymentsRouteImport } from './routes/payments'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CardsRouteImport } from './routes/cards'
@@ -18,6 +19,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const TransfersRoute = TransfersRouteImport.update({
   id: '/transfers',
   path: '/transfers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PaymentsRoute = PaymentsRouteImport.update({
@@ -46,6 +52,7 @@ export interface FileRoutesByFullPath {
   '/cards': typeof CardsRoute
   '/dashboard': typeof DashboardRoute
   '/payments': typeof PaymentsRoute
+  '/profile': typeof ProfileRoute
   '/transfers': typeof TransfersRoute
 }
 export interface FileRoutesByTo {
@@ -53,6 +60,7 @@ export interface FileRoutesByTo {
   '/cards': typeof CardsRoute
   '/dashboard': typeof DashboardRoute
   '/payments': typeof PaymentsRoute
+  '/profile': typeof ProfileRoute
   '/transfers': typeof TransfersRoute
 }
 export interface FileRoutesById {
@@ -61,14 +69,28 @@ export interface FileRoutesById {
   '/cards': typeof CardsRoute
   '/dashboard': typeof DashboardRoute
   '/payments': typeof PaymentsRoute
+  '/profile': typeof ProfileRoute
   '/transfers': typeof TransfersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cards' | '/dashboard' | '/payments' | '/transfers'
+  fullPaths:
+    | '/'
+    | '/cards'
+    | '/dashboard'
+    | '/payments'
+    | '/profile'
+    | '/transfers'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cards' | '/dashboard' | '/payments' | '/transfers'
-  id: '__root__' | '/' | '/cards' | '/dashboard' | '/payments' | '/transfers'
+  to: '/' | '/cards' | '/dashboard' | '/payments' | '/profile' | '/transfers'
+  id:
+    | '__root__'
+    | '/'
+    | '/cards'
+    | '/dashboard'
+    | '/payments'
+    | '/profile'
+    | '/transfers'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -76,6 +98,7 @@ export interface RootRouteChildren {
   CardsRoute: typeof CardsRoute
   DashboardRoute: typeof DashboardRoute
   PaymentsRoute: typeof PaymentsRoute
+  ProfileRoute: typeof ProfileRoute
   TransfersRoute: typeof TransfersRoute
 }
 
@@ -86,6 +109,13 @@ declare module '@tanstack/react-router' {
       path: '/transfers'
       fullPath: '/transfers'
       preLoaderRoute: typeof TransfersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/payments': {
@@ -124,6 +154,7 @@ const rootRouteChildren: RootRouteChildren = {
   CardsRoute: CardsRoute,
   DashboardRoute: DashboardRoute,
   PaymentsRoute: PaymentsRoute,
+  ProfileRoute: ProfileRoute,
   TransfersRoute: TransfersRoute,
 }
 export const routeTree = rootRouteImport
