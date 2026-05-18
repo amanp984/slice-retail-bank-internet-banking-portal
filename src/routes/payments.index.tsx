@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { motion } from "framer-motion";
 import { Zap, Shield, Smartphone, Home, CreditCard, Droplet, Flame, History, Users, Bookmark, Repeat, Info, FileCheck2 } from "lucide-react";
@@ -14,14 +14,14 @@ export const Route = createFileRoute("/payments/")({
 });
 
 const cats = [
-  { icon: Zap, title: "Electricity Bill Payment", desc: "Pay your electricity bills instantly and securely." },
-  { icon: FileCheck2, title: "GST Payment", desc: "Make GST payments quickly and hassle-free." },
-  { icon: Shield, title: "Life Insurance Payment", desc: "Pay your life insurance premiums securely." },
-  { icon: Smartphone, title: "Mobile Bill Payment", desc: "Recharge your mobile number instantly." },
-  { icon: Home, title: "Home Loan Payment", desc: "Pay your home loan EMIs easily and on time." },
-  { icon: CreditCard, title: "Credit Card Payment", desc: "Pay your credit card bills instantly and securely." },
-  { icon: Droplet, title: "Water Bill Payment", desc: "Pay your water bills instantly and securely." },
-  { icon: Flame, title: "Gas Bill Payment", desc: "Pay your gas bills instantly and securely." },
+  { icon: Zap, title: "Electricity Bill Payment", desc: "Pay your electricity bills instantly and securely.", slug: "electricity" },
+  { icon: FileCheck2, title: "GST Payment", desc: "Make GST payments quickly and hassle-free.", slug: "gst" },
+  { icon: Shield, title: "Life Insurance Payment", desc: "Pay your life insurance premiums securely.", slug: "insurance" },
+  { icon: Smartphone, title: "Mobile Bill Payment", desc: "Recharge your mobile number instantly.", slug: "mobile" },
+  { icon: Home, title: "Home Loan Payment", desc: "Pay your home loan EMIs easily and on time.", slug: "home-loan" },
+  { icon: CreditCard, title: "Credit Card Payment", desc: "Pay your credit card bills instantly and securely.", slug: "credit-card" },
+  { icon: Droplet, title: "Water Bill Payment", desc: "Pay your water bills instantly and securely.", slug: "water" },
+  { icon: Flame, title: "Gas Bill Payment", desc: "Pay your gas bills instantly and securely.", slug: "gas" },
 ];
 
 const recent = [
