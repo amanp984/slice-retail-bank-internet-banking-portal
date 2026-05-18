@@ -39,7 +39,7 @@ function Profile() {
             <div className="flex items-center gap-5 pb-6 border-b border-border">
               <div className="w-20 h-20 rounded-full bg-accent text-primary grid place-items-center text-2xl font-bold">RS</div>
               <div>
-                <div className="text-lg font-bold">Rahul Sharma</div>
+                <div className="text-lg font-bold">Rambabu</div>
                 <div className="text-sm text-muted-foreground">Customer ID: CUST12345678</div>
               </div>
             </div>
