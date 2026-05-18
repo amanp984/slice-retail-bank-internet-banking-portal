@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TransfersRouteImport } from './routes/transfers'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PaymentsRouteImport } from './routes/payments'
 import { Route as OffersRouteImport } from './routes/offers'
@@ -18,14 +17,10 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CardsRouteImport } from './routes/cards'
 import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TransfersIndexRouteImport } from './routes/transfers.index'
 import { Route as TransfersTransferlimitRouteImport } from './routes/transfers.transferlimit'
 import { Route as TransfersManagebeneficiariesRouteImport } from './routes/transfers.managebeneficiaries'
 
-const TransfersRoute = TransfersRouteImport.update({
-  id: '/transfers',
-  path: '/transfers',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -66,6 +61,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TransfersIndexRoute = TransfersIndexRouteImport.update({
+  id: '/transfers/',
+  path: '/transfers/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TransfersTransferlimitRoute = TransfersTransferlimitRouteImport.update({
   id: '/transferlimit',
   path: '/transferlimit',
@@ -87,9 +87,9 @@ export interface FileRoutesByFullPath {
   '/offers': typeof OffersRoute
   '/payments': typeof PaymentsRoute
   '/profile': typeof ProfileRoute
-  '/transfers': typeof TransfersRouteWithChildren
   '/transfers/managebeneficiaries': typeof TransfersManagebeneficiariesRoute
   '/transfers/transferlimit': typeof TransfersTransferlimitRoute
+  '/transfers/': typeof TransfersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -100,9 +100,9 @@ export interface FileRoutesByTo {
   '/offers': typeof OffersRoute
   '/payments': typeof PaymentsRoute
   '/profile': typeof ProfileRoute
-  '/transfers': typeof TransfersRouteWithChildren
   '/transfers/managebeneficiaries': typeof TransfersManagebeneficiariesRoute
   '/transfers/transferlimit': typeof TransfersTransferlimitRoute
+  '/transfers': typeof TransfersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -114,9 +114,9 @@ export interface FileRoutesById {
   '/offers': typeof OffersRoute
   '/payments': typeof PaymentsRoute
   '/profile': typeof ProfileRoute
-  '/transfers': typeof TransfersRouteWithChildren
   '/transfers/managebeneficiaries': typeof TransfersManagebeneficiariesRoute
   '/transfers/transferlimit': typeof TransfersTransferlimitRoute
+  '/transfers/': typeof TransfersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -129,9 +129,9 @@ export interface FileRouteTypes {
     | '/offers'
     | '/payments'
     | '/profile'
-    | '/transfers'
     | '/transfers/managebeneficiaries'
     | '/transfers/transferlimit'
+    | '/transfers/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -142,9 +142,9 @@ export interface FileRouteTypes {
     | '/offers'
     | '/payments'
     | '/profile'
-    | '/transfers'
     | '/transfers/managebeneficiaries'
     | '/transfers/transferlimit'
+    | '/transfers'
   id:
     | '__root__'
     | '/'
@@ -155,9 +155,9 @@ export interface FileRouteTypes {
     | '/offers'
     | '/payments'
     | '/profile'
-    | '/transfers'
     | '/transfers/managebeneficiaries'
     | '/transfers/transferlimit'
+    | '/transfers/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -169,18 +169,11 @@ export interface RootRouteChildren {
   OffersRoute: typeof OffersRoute
   PaymentsRoute: typeof PaymentsRoute
   ProfileRoute: typeof ProfileRoute
-  TransfersRoute: typeof TransfersRouteWithChildren
+  TransfersIndexRoute: typeof TransfersIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/transfers': {
-      id: '/transfers'
-      path: '/transfers'
-      fullPath: '/transfers'
-      preLoaderRoute: typeof TransfersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/profile': {
       id: '/profile'
       path: '/profile'
@@ -237,6 +230,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/transfers/': {
+      id: '/transfers/'
+      path: '/transfers'
+      fullPath: '/transfers/'
+      preLoaderRoute: typeof TransfersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/transfers/transferlimit': {
       id: '/transfers/transferlimit'
       path: '/transferlimit'
@@ -254,20 +254,6 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface TransfersRouteChildren {
-  TransfersManagebeneficiariesRoute: typeof TransfersManagebeneficiariesRoute
-  TransfersTransferlimitRoute: typeof TransfersTransferlimitRoute
-}
-
-const TransfersRouteChildren: TransfersRouteChildren = {
-  TransfersManagebeneficiariesRoute: TransfersManagebeneficiariesRoute,
-  TransfersTransferlimitRoute: TransfersTransferlimitRoute,
-}
-
-const TransfersRouteWithChildren = TransfersRoute._addFileChildren(
-  TransfersRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountsRoute: AccountsRoute,
@@ -277,8 +263,18 @@ const rootRouteChildren: RootRouteChildren = {
   OffersRoute: OffersRoute,
   PaymentsRoute: PaymentsRoute,
   ProfileRoute: ProfileRoute,
-  TransfersRoute: TransfersRouteWithChildren,
+  TransfersIndexRoute: TransfersIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

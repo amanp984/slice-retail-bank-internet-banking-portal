@@ -8,7 +8,7 @@ import {
 import { useState } from "react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/transfers")({
+export const Route = createFileRoute("/transfers/")({
   head: () => ({
     meta: [
       { title: "Payment Transfer — Slice Bank" },
