@@ -32,7 +32,7 @@ export function DashboardLayout({
 
   return (
     <div className="min-h-screen flex bg-background">
-      <aside className="w-[260px] bg-sidebar-gradient text-white flex flex-col fixed inset-y-0 left-0 z-30">
+      <aside className="w-[220px] bg-sidebar-gradient text-white flex flex-col fixed inset-y-0 left-0 z-30">
         <div className="px-6 py-7">
           <div className="text-3xl font-bold tracking-tight italic">slice</div>
           <div className="text-xs tracking-[0.3em] font-semibold opacity-90 mt-0.5">BANK</div>
@@ -66,8 +66,8 @@ export function DashboardLayout({
         </div>
       </aside>
 
-      <main className="flex-1 ml-[260px]">
-        <header className="px-10 pt-7 pb-4 flex items-start justify-between gap-6">
+      <main className="flex-1 ml-[220px]">
+        <header className="px-8 pt-7 pb-4 flex items-start justify-between gap-6">
           <div>
             {showGreeting && (
               <>
@@ -91,7 +91,8 @@ export function DashboardLayout({
           </div>
         </header>
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}
-          className="px-10 pb-10">
+          className="px-8 pb-10">
+
           {children}
         </motion.div>
       </main>
