@@ -1,0 +1,184 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { DashboardLayout } from "@/components/DashboardLayout";
+import { motion } from "framer-motion";
+import {
+  Landmark, Zap, Clock, ChevronDown, Plus, User, Users, History,
+  BarChart3, Download, Info, ShieldCheck,
+} from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+
+export const Route = createFileRoute("/transfers/")({
+  head: () => ({
+    meta: [
+      { title: "Payment Transfer — Slice Bank" },
+      { name: "description", content: "Transfer money securely via IMPS, NEFT or RTGS with Slice Bank." },
+    ],
+  }),
+  component: TransfersPage,
+});
+
+const modes = [
+  { key: "IMPS", icon: Zap, sub: "Instant Transfer (24x7)" },
+  { key: "NEFT", icon: Landmark, sub: "Standard Transfer" },
+  { key: "RTGS", icon: Clock, sub: "High Value Transfer" },
+];
+
+function TransfersPage() {
+  const [mode, setMode] = useState("IMPS");
+  const [amount, setAmount] = useState("");
+  const [remarks, setRemarks] = useState("");
+
+  const onReview = () => {
+    if (!amount) return toast.error("Please enter an amount");
+    toast.success("Transfer initiated — awaiting OTP verification");
+  };
+
+  return (
+    <DashboardLayout showGreeting={false}>
+      <h1 className="text-2xl font-bold">Payment Transfer</h1>
+      <p className="text-sm text-muted-foreground mt-1 mb-6">Transfer money securely to another account</p>
+
+      <div className="grid grid-cols-12 gap-5">
+        <div className="col-span-12 lg:col-span-8 space-y-5">
+          <div className="bg-card rounded-2xl border border-border shadow-sm p-6 space-y-6">
+            {/* From Account */}
+            <div>
+              <label className="text-sm font-semibold text-foreground">From Account</label>
+              <div className="mt-2 flex items-center gap-4 p-4 rounded-xl border border-border hover:border-primary/40 transition cursor-pointer">
+                <div className="w-11 h-11 rounded-full bg-accent text-primary grid place-items-center">
+                  <Landmark className="w-5 h-5" />
+                </div>
+                <div className="flex-1">
+                  <div className="font-semibold text-sm">Current Account</div>
+                  <div className="text-xs text-muted-foreground mt-0.5">XXXX XXXX 5678</div>
+                </div>
+                <div className="text-right">
+                  <div className="text-xs text-muted-foreground">Available Balance</div>
+                  <div className="font-semibold">₹1,24,560.00</div>
+                </div>
+                <ChevronDown className="w-4 h-4 text-muted-foreground" />
+              </div>
+            </div>
+
+            {/* Beneficiary */}
+            <div>
+              <label className="text-sm font-semibold text-foreground">Select Beneficiary</label>
+              <div className="mt-2 grid grid-cols-[1fr_auto] gap-3">
+                <button className="flex items-center gap-3 p-3.5 rounded-xl border border-border hover:border-primary/40 transition text-left">
+                  <div className="w-10 h-10 rounded-full bg-accent text-primary grid place-items-center">
+                    <User className="w-4 h-4" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm font-medium">Select Beneficiary</div>
+                    <div className="text-xs text-muted-foreground">Choose a saved beneficiary</div>
+                  </div>
+                  <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                </button>
+                <Link to="/transfers/managebeneficiaries"
+                  className="px-4 rounded-xl border border-primary text-primary text-sm font-semibold hover:bg-accent transition flex items-center gap-1">
+                  <Plus className="w-4 h-4" /> Add New Beneficiary
+                </Link>
+              </div>
+            </div>
+
+            {/* Amount */}
+            <div>
+              <label className="text-sm font-semibold text-foreground">Amount (₹)</label>
+              <input value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^0-9.]/g, ""))}
+                placeholder="Enter Amount"
+                className="mt-2 w-full p-3.5 rounded-xl border border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm" />
+              <div className="flex justify-between mt-1.5 text-xs text-muted-foreground">
+                <span>Min: ₹1.00 &nbsp;&nbsp; Max: ₹1,00,000.00</span>
+                <span>Transaction Limit: ₹1,00,000.00</span>
+              </div>
+            </div>
+
+            {/* Payment Mode */}
+            <div>
+              <label className="text-sm font-semibold text-foreground">Payment Mode</label>
+              <div className="mt-2 grid grid-cols-1 md:grid-cols-3 gap-3">
+                {modes.map((m) => {
+                  const active = mode === m.key;
+                  return (
+                    <motion.button key={m.key} whileHover={{ y: -2 }} onClick={() => setMode(m.key)}
+                      className={`flex items-center gap-3 p-4 rounded-xl border-2 transition text-left
+                        ${active ? "border-primary bg-accent/40" : "border-border hover:border-primary/30"}`}>
+                      <div className={`w-5 h-5 rounded-full border-2 grid place-items-center
+                        ${active ? "border-primary" : "border-border"}`}>
+                        {active && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
+                      </div>
+                      <div className="w-9 h-9 rounded-full bg-accent text-primary grid place-items-center">
+                        <m.icon className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="font-semibold text-sm">{m.key}</div>
+                        <div className="text-xs text-muted-foreground">{m.sub}</div>
+                      </div>
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Remarks */}
+            <div>
+              <label className="text-sm font-semibold text-foreground">Transaction Remarks (Optional)</label>
+              <input value={remarks} onChange={(e) => setRemarks(e.target.value.slice(0, 40))}
+                placeholder="Enter transaction remarks"
+                className="mt-2 w-full p-3.5 rounded-xl border border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm" />
+              <div className="flex justify-between mt-1.5 text-xs text-muted-foreground">
+                <span>Max 40 characters</span>
+                <span>{remarks.length}/40</span>
+              </div>
+            </div>
+
+            <div className="flex justify-end">
+              <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={onReview}
+                className="px-7 py-3 rounded-xl bg-primary text-primary-foreground font-semibold text-sm shadow-md hover:shadow-lg transition">
+                Review & Confirm
+              </motion.button>
+            </div>
+          </div>
+
+          <div className="bg-accent/40 border border-accent rounded-xl p-4 flex items-center gap-3">
+            <Info className="w-5 h-5 text-primary shrink-0" />
+            <p className="text-xs text-foreground">Ensure all details are correct before proceeding with the payment transfer.</p>
+          </div>
+          <p className="text-xs text-muted-foreground text-center">Slice Bank Internet Banking is safe, secure and easy to use. Do not share your password, OTP or card details with anyone.</p>
+        </div>
+
+        {/* Right column */}
+        <div className="col-span-12 lg:col-span-4 space-y-5">
+          <div className="bg-card rounded-2xl border border-border shadow-sm p-5">
+            <h3 className="font-bold mb-2">Quick Actions</h3>
+            <ul className="divide-y divide-border">
+              {[
+                { i: Users, l: "Manage Beneficiaries", to: "/transfers/managebeneficiaries" },
+                { i: History, l: "Transaction History", to: "/transfers" },
+                { i: BarChart3, l: "Transfer Limits", to: "/transfers/transferlimit" },
+                { i: Download, l: "Download Statement", to: "/transfers" },
+              ].map(({ i: I, l, to }) => (
+                <li key={l}>
+                  <Link to={to} className="flex items-center justify-between py-3 text-sm hover:text-primary transition">
+                    <span className="flex items-center gap-3"><I className="w-4 h-4 text-primary" /> {l}</span>
+                    <span className="text-muted-foreground">›</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="bg-accent/30 border border-accent rounded-2xl p-5">
+            <div className="flex items-center gap-2 mb-2">
+              <Info className="w-4 h-4 text-primary" />
+              <h3 className="font-bold">Important Note</h3>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">Ensure all transfer details are verified before processing the transaction.</p>
+            <button className="mt-3 text-xs font-semibold text-primary hover:underline inline-flex items-center gap-1">Know More →</button>
+          </div>
+        </div>
+      </div>
+    </DashboardLayout>
+  );
+}

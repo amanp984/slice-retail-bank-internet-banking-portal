@@ -18,6 +18,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CardsRouteImport } from './routes/cards'
 import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TransfersIndexRouteImport } from './routes/transfers.index'
 import { Route as TransfersTransferlimitRouteImport } from './routes/transfers.transferlimit'
 import { Route as TransfersManagebeneficiariesRouteImport } from './routes/transfers.managebeneficiaries'
 
@@ -66,6 +67,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TransfersIndexRoute = TransfersIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => TransfersRoute,
+} as any)
 const TransfersTransferlimitRoute = TransfersTransferlimitRouteImport.update({
   id: '/transferlimit',
   path: '/transferlimit',
@@ -90,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/transfers': typeof TransfersRouteWithChildren
   '/transfers/managebeneficiaries': typeof TransfersManagebeneficiariesRoute
   '/transfers/transferlimit': typeof TransfersTransferlimitRoute
+  '/transfers/': typeof TransfersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -100,9 +107,9 @@ export interface FileRoutesByTo {
   '/offers': typeof OffersRoute
   '/payments': typeof PaymentsRoute
   '/profile': typeof ProfileRoute
-  '/transfers': typeof TransfersRouteWithChildren
   '/transfers/managebeneficiaries': typeof TransfersManagebeneficiariesRoute
   '/transfers/transferlimit': typeof TransfersTransferlimitRoute
+  '/transfers': typeof TransfersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -117,6 +124,7 @@ export interface FileRoutesById {
   '/transfers': typeof TransfersRouteWithChildren
   '/transfers/managebeneficiaries': typeof TransfersManagebeneficiariesRoute
   '/transfers/transferlimit': typeof TransfersTransferlimitRoute
+  '/transfers/': typeof TransfersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -132,6 +140,7 @@ export interface FileRouteTypes {
     | '/transfers'
     | '/transfers/managebeneficiaries'
     | '/transfers/transferlimit'
+    | '/transfers/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -142,9 +151,9 @@ export interface FileRouteTypes {
     | '/offers'
     | '/payments'
     | '/profile'
-    | '/transfers'
     | '/transfers/managebeneficiaries'
     | '/transfers/transferlimit'
+    | '/transfers'
   id:
     | '__root__'
     | '/'
@@ -158,6 +167,7 @@ export interface FileRouteTypes {
     | '/transfers'
     | '/transfers/managebeneficiaries'
     | '/transfers/transferlimit'
+    | '/transfers/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -237,6 +247,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/transfers/': {
+      id: '/transfers/'
+      path: '/'
+      fullPath: '/transfers/'
+      preLoaderRoute: typeof TransfersIndexRouteImport
+      parentRoute: typeof TransfersRoute
+    }
     '/transfers/transferlimit': {
       id: '/transfers/transferlimit'
       path: '/transferlimit'
@@ -257,11 +274,13 @@ declare module '@tanstack/react-router' {
 interface TransfersRouteChildren {
   TransfersManagebeneficiariesRoute: typeof TransfersManagebeneficiariesRoute
   TransfersTransferlimitRoute: typeof TransfersTransferlimitRoute
+  TransfersIndexRoute: typeof TransfersIndexRoute
 }
 
 const TransfersRouteChildren: TransfersRouteChildren = {
   TransfersManagebeneficiariesRoute: TransfersManagebeneficiariesRoute,
   TransfersTransferlimitRoute: TransfersTransferlimitRoute,
+  TransfersIndexRoute: TransfersIndexRoute,
 }
 
 const TransfersRouteWithChildren = TransfersRoute._addFileChildren(
