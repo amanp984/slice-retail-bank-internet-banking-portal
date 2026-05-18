@@ -41,7 +41,7 @@ function Dashboard() {
         <motion.div whileHover={{ y: -2 }} className="col-span-12 lg:col-span-5 bg-card-gradient rounded-2xl p-6 text-white relative overflow-hidden shadow-card">
           <Landmark className="absolute right-6 top-6 w-28 h-28 text-white/10" />
           <div className="flex items-center gap-2 text-sm">
-            <span>Savings Account</span>
+            <span>Current Account</span>
             <span className="px-2 py-0.5 rounded-full bg-white/15 text-[10px] font-semibold">Primary Account</span>
           </div>
           <div className="text-xs opacity-80 mt-1">XXXX XXXX 1234</div>
