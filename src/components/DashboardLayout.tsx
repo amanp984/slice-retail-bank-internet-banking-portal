@@ -71,7 +71,7 @@ export function DashboardLayout({
           <div>
             {showGreeting && (
               <>
-                <h1 className="text-2xl font-bold text-foreground">Good Morning, Rahul <span>👋</span></h1>
+                <h1 className="text-2xl font-bold text-foreground">Hello, Rambabu</h1>
                 <p className="text-sm text-muted-foreground mt-1">Last login: 22 May 2024, 09:15 AM</p>
               </>
             )}
