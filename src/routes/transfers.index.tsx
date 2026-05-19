@@ -77,7 +77,7 @@ function TransfersPage() {
                 </button>
                 <Link to="/transfers/managebeneficiaries"
                   className="px-4 rounded-xl border border-primary text-primary text-sm font-semibold hover:bg-accent transition flex items-center gap-1">
-                  <Plus className="w-4 h-4" /> Offers
+                  <Plus className="w-4 h-4" /> Add Beneficiary
                 </Link>
               </div>
             </div>
