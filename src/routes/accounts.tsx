@@ -84,7 +84,7 @@ function AccountsPage() {
   const [modal, setModal] = useState<null | "fd" | "loan" | "invest">(null);
   const [toast, setToast] = useState<string | null>(null);
 
-  const data = accountData[active === "loan" ? "current" : active];
+  const data = accountData[active === "loan" || active === "savings" ? "current" : active];
 
   const showToast = (msg: string) => {
     setToast(msg);
