@@ -15,9 +15,9 @@ export const Route = createFileRoute("/profile")({
 const info = [
   { i: IdCard, k: "Customer ID", v: "380008322724" },
   { i: IdCard, k: "Aadhaar Card (Last 4 Digits)", v: "XXXX XXXX 9843" },
-  { i: MapPin, k: "Address", v: "123, MG Road, Bengaluru,\nKarnataka - 560001" },
+  { i: MapPin, k: "Address", v: "Sodawala Nagar complex number 3, sector 44 Mumbai 400092" },
   { i: IdCard, k: "PAN Card Number", v: "GOXXXXXX77B" },
-  { i: MapPin, k: "Permanent Address", v: "123, MG Road, Bengaluru,\nKarnataka - 560001" },
+  { i: MapPin, k: "Permanent Address", v: "Sodawala Nagar complex number 3, sector 44 Mumbai 400092" },
   { i: Building, k: "Bank Address", v: "Slice Bank, 6th Floor, Tower 1,\nOne World Centre, Senapati Bapat Marg,\nLower Parel, Mumbai - 400013" },
   { i: Building, k: "Branch Address", v: "Slice Bank, Mumbai - Corporate Branch,\nTower A, BKC,\nMumbai, Maharashtra - 400051" },
 ];
