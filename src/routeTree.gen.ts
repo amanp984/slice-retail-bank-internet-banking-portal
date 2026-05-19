@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TransfersRouteImport } from './routes/transfers'
 import { Route as TransactionsRouteImport } from './routes/transactions'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PaymentsRouteImport } from './routes/payments'
 import { Route as OffersRouteImport } from './routes/offers'
@@ -38,6 +39,11 @@ const TransfersRoute = TransfersRouteImport.update({
 const TransactionsRoute = TransactionsRouteImport.update({
   id: '/transactions',
   path: '/transactions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -143,6 +149,7 @@ export interface FileRoutesByFullPath {
   '/offers': typeof OffersRoute
   '/payments': typeof PaymentsRouteWithChildren
   '/profile': typeof ProfileRoute
+  '/signup': typeof SignupRoute
   '/transactions': typeof TransactionsRoute
   '/transfers': typeof TransfersRouteWithChildren
   '/cards/block-card': typeof CardsBlockCardRoute
@@ -163,6 +170,7 @@ export interface FileRoutesByTo {
   '/loans': typeof LoansRoute
   '/offers': typeof OffersRoute
   '/profile': typeof ProfileRoute
+  '/signup': typeof SignupRoute
   '/transactions': typeof TransactionsRoute
   '/cards/block-card': typeof CardsBlockCardRoute
   '/payments/$category': typeof PaymentsCategoryRoute
@@ -185,6 +193,7 @@ export interface FileRoutesById {
   '/offers': typeof OffersRoute
   '/payments': typeof PaymentsRouteWithChildren
   '/profile': typeof ProfileRoute
+  '/signup': typeof SignupRoute
   '/transactions': typeof TransactionsRoute
   '/transfers': typeof TransfersRouteWithChildren
   '/cards/block-card': typeof CardsBlockCardRoute
@@ -209,6 +218,7 @@ export interface FileRouteTypes {
     | '/offers'
     | '/payments'
     | '/profile'
+    | '/signup'
     | '/transactions'
     | '/transfers'
     | '/cards/block-card'
@@ -229,6 +239,7 @@ export interface FileRouteTypes {
     | '/loans'
     | '/offers'
     | '/profile'
+    | '/signup'
     | '/transactions'
     | '/cards/block-card'
     | '/payments/$category'
@@ -250,6 +261,7 @@ export interface FileRouteTypes {
     | '/offers'
     | '/payments'
     | '/profile'
+    | '/signup'
     | '/transactions'
     | '/transfers'
     | '/cards/block-card'
@@ -273,6 +285,7 @@ export interface RootRouteChildren {
   OffersRoute: typeof OffersRoute
   PaymentsRoute: typeof PaymentsRouteWithChildren
   ProfileRoute: typeof ProfileRoute
+  SignupRoute: typeof SignupRoute
   TransactionsRoute: typeof TransactionsRoute
   TransfersRoute: typeof TransfersRouteWithChildren
 }
@@ -291,6 +304,13 @@ declare module '@tanstack/react-router' {
       path: '/transactions'
       fullPath: '/transactions'
       preLoaderRoute: typeof TransactionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -477,6 +497,7 @@ const rootRouteChildren: RootRouteChildren = {
   OffersRoute: OffersRoute,
   PaymentsRoute: PaymentsRouteWithChildren,
   ProfileRoute: ProfileRoute,
+  SignupRoute: SignupRoute,
   TransactionsRoute: TransactionsRoute,
   TransfersRoute: TransfersRouteWithChildren,
 }
