@@ -50,7 +50,7 @@ const accountData = {
     balance: "₹0.00",
     holder: "Rambabu",
     number: "XXXX XXXX XXXX 2341",
-    ifsc: "SLCE0001234",
+    ifsc: "NESF0000333",
     type: "Savings Account",
     branch: "Mumbai Corporate Branch",
     status: "Active",
