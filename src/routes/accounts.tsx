@@ -31,11 +31,11 @@ const accountData = {
   current: {
     name: "Slice Current Account",
     subtitle: "Your primary business account",
-    mask: "XXXX XXXX XXXX 5678",
+    mask: "XXXX XXXX XXXX 9501",
     badge: "Primary Account",
     balance: "₹0.00",
     holder: "Rambabu",
-    number: "XXXX XXXX XXXX 5678",
+    number: "XXXX XXXX XXXX 9501",
     ifsc: "SLCE0001234",
     type: "Current Account",
     branch: "Mumbai Corporate Branch",
