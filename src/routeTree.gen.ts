@@ -10,10 +10,13 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TransfersRouteImport } from './routes/transfers'
+import { Route as TransactionsRouteImport } from './routes/transactions'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PaymentsRouteImport } from './routes/payments'
 import { Route as OffersRouteImport } from './routes/offers'
+import { Route as LoansRouteImport } from './routes/loans'
 import { Route as HelpRouteImport } from './routes/help'
+import { Route as FixeddepositsRouteImport } from './routes/fixeddeposits'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CardsRouteImport } from './routes/cards'
 import { Route as AccountsRouteImport } from './routes/accounts'
@@ -31,6 +34,11 @@ const TransfersRoute = TransfersRouteImport.update({
   path: '/transfers',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TransactionsRoute = TransactionsRouteImport.update({
+  id: '/transactions',
+  path: '/transactions',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -46,9 +54,19 @@ const OffersRoute = OffersRouteImport.update({
   path: '/offers',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoansRoute = LoansRouteImport.update({
+  id: '/loans',
+  path: '/loans',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HelpRoute = HelpRouteImport.update({
   id: '/help',
   path: '/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FixeddepositsRoute = FixeddepositsRouteImport.update({
+  id: '/fixeddeposits',
+  path: '/fixeddeposits',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -113,10 +131,13 @@ export interface FileRoutesByFullPath {
   '/accounts': typeof AccountsRoute
   '/cards': typeof CardsRouteWithChildren
   '/dashboard': typeof DashboardRoute
+  '/fixeddeposits': typeof FixeddepositsRoute
   '/help': typeof HelpRoute
+  '/loans': typeof LoansRoute
   '/offers': typeof OffersRoute
   '/payments': typeof PaymentsRouteWithChildren
   '/profile': typeof ProfileRoute
+  '/transactions': typeof TransactionsRoute
   '/transfers': typeof TransfersRouteWithChildren
   '/cards/block-card': typeof CardsBlockCardRoute
   '/payments/$category': typeof PaymentsCategoryRoute
@@ -130,9 +151,12 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accounts': typeof AccountsRoute
   '/dashboard': typeof DashboardRoute
+  '/fixeddeposits': typeof FixeddepositsRoute
   '/help': typeof HelpRoute
+  '/loans': typeof LoansRoute
   '/offers': typeof OffersRoute
   '/profile': typeof ProfileRoute
+  '/transactions': typeof TransactionsRoute
   '/cards/block-card': typeof CardsBlockCardRoute
   '/payments/$category': typeof PaymentsCategoryRoute
   '/transfers/managebeneficiaries': typeof TransfersManagebeneficiariesRoute
@@ -147,10 +171,13 @@ export interface FileRoutesById {
   '/accounts': typeof AccountsRoute
   '/cards': typeof CardsRouteWithChildren
   '/dashboard': typeof DashboardRoute
+  '/fixeddeposits': typeof FixeddepositsRoute
   '/help': typeof HelpRoute
+  '/loans': typeof LoansRoute
   '/offers': typeof OffersRoute
   '/payments': typeof PaymentsRouteWithChildren
   '/profile': typeof ProfileRoute
+  '/transactions': typeof TransactionsRoute
   '/transfers': typeof TransfersRouteWithChildren
   '/cards/block-card': typeof CardsBlockCardRoute
   '/payments/$category': typeof PaymentsCategoryRoute
@@ -167,10 +194,13 @@ export interface FileRouteTypes {
     | '/accounts'
     | '/cards'
     | '/dashboard'
+    | '/fixeddeposits'
     | '/help'
+    | '/loans'
     | '/offers'
     | '/payments'
     | '/profile'
+    | '/transactions'
     | '/transfers'
     | '/cards/block-card'
     | '/payments/$category'
@@ -184,9 +214,12 @@ export interface FileRouteTypes {
     | '/'
     | '/accounts'
     | '/dashboard'
+    | '/fixeddeposits'
     | '/help'
+    | '/loans'
     | '/offers'
     | '/profile'
+    | '/transactions'
     | '/cards/block-card'
     | '/payments/$category'
     | '/transfers/managebeneficiaries'
@@ -200,10 +233,13 @@ export interface FileRouteTypes {
     | '/accounts'
     | '/cards'
     | '/dashboard'
+    | '/fixeddeposits'
     | '/help'
+    | '/loans'
     | '/offers'
     | '/payments'
     | '/profile'
+    | '/transactions'
     | '/transfers'
     | '/cards/block-card'
     | '/payments/$category'
@@ -219,10 +255,13 @@ export interface RootRouteChildren {
   AccountsRoute: typeof AccountsRoute
   CardsRoute: typeof CardsRouteWithChildren
   DashboardRoute: typeof DashboardRoute
+  FixeddepositsRoute: typeof FixeddepositsRoute
   HelpRoute: typeof HelpRoute
+  LoansRoute: typeof LoansRoute
   OffersRoute: typeof OffersRoute
   PaymentsRoute: typeof PaymentsRouteWithChildren
   ProfileRoute: typeof ProfileRoute
+  TransactionsRoute: typeof TransactionsRoute
   TransfersRoute: typeof TransfersRouteWithChildren
 }
 
@@ -233,6 +272,13 @@ declare module '@tanstack/react-router' {
       path: '/transfers'
       fullPath: '/transfers'
       preLoaderRoute: typeof TransfersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transactions': {
+      id: '/transactions'
+      path: '/transactions'
+      fullPath: '/transactions'
+      preLoaderRoute: typeof TransactionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -256,11 +302,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OffersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/loans': {
+      id: '/loans'
+      path: '/loans'
+      fullPath: '/loans'
+      preLoaderRoute: typeof LoansRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/help': {
       id: '/help'
       path: '/help'
       fullPath: '/help'
       preLoaderRoute: typeof HelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fixeddeposits': {
+      id: '/fixeddeposits'
+      path: '/fixeddeposits'
+      fullPath: '/fixeddeposits'
+      preLoaderRoute: typeof FixeddepositsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -390,10 +450,13 @@ const rootRouteChildren: RootRouteChildren = {
   AccountsRoute: AccountsRoute,
   CardsRoute: CardsRouteWithChildren,
   DashboardRoute: DashboardRoute,
+  FixeddepositsRoute: FixeddepositsRoute,
   HelpRoute: HelpRoute,
+  LoansRoute: LoansRoute,
   OffersRoute: OffersRoute,
   PaymentsRoute: PaymentsRouteWithChildren,
   ProfileRoute: ProfileRoute,
+  TransactionsRoute: TransactionsRoute,
   TransfersRoute: TransfersRouteWithChildren,
 }
 export const routeTree = rootRouteImport
