@@ -24,6 +24,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as TransfersIndexRouteImport } from './routes/transfers.index'
 import { Route as PaymentsIndexRouteImport } from './routes/payments.index'
 import { Route as CardsIndexRouteImport } from './routes/cards.index'
+import { Route as TransfersVerifyRouteImport } from './routes/transfers.verify'
 import { Route as TransfersTransferlimitRouteImport } from './routes/transfers.transferlimit'
 import { Route as TransfersManagebeneficiariesRouteImport } from './routes/transfers.managebeneficiaries'
 import { Route as PaymentsCategoryRouteImport } from './routes/payments.$category'
@@ -104,6 +105,11 @@ const CardsIndexRoute = CardsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => CardsRoute,
 } as any)
+const TransfersVerifyRoute = TransfersVerifyRouteImport.update({
+  id: '/verify',
+  path: '/verify',
+  getParentRoute: () => TransfersRoute,
+} as any)
 const TransfersTransferlimitRoute = TransfersTransferlimitRouteImport.update({
   id: '/transferlimit',
   path: '/transferlimit',
@@ -143,6 +149,7 @@ export interface FileRoutesByFullPath {
   '/payments/$category': typeof PaymentsCategoryRoute
   '/transfers/managebeneficiaries': typeof TransfersManagebeneficiariesRoute
   '/transfers/transferlimit': typeof TransfersTransferlimitRoute
+  '/transfers/verify': typeof TransfersVerifyRoute
   '/cards/': typeof CardsIndexRoute
   '/payments/': typeof PaymentsIndexRoute
   '/transfers/': typeof TransfersIndexRoute
@@ -161,6 +168,7 @@ export interface FileRoutesByTo {
   '/payments/$category': typeof PaymentsCategoryRoute
   '/transfers/managebeneficiaries': typeof TransfersManagebeneficiariesRoute
   '/transfers/transferlimit': typeof TransfersTransferlimitRoute
+  '/transfers/verify': typeof TransfersVerifyRoute
   '/cards': typeof CardsIndexRoute
   '/payments': typeof PaymentsIndexRoute
   '/transfers': typeof TransfersIndexRoute
@@ -183,6 +191,7 @@ export interface FileRoutesById {
   '/payments/$category': typeof PaymentsCategoryRoute
   '/transfers/managebeneficiaries': typeof TransfersManagebeneficiariesRoute
   '/transfers/transferlimit': typeof TransfersTransferlimitRoute
+  '/transfers/verify': typeof TransfersVerifyRoute
   '/cards/': typeof CardsIndexRoute
   '/payments/': typeof PaymentsIndexRoute
   '/transfers/': typeof TransfersIndexRoute
@@ -206,6 +215,7 @@ export interface FileRouteTypes {
     | '/payments/$category'
     | '/transfers/managebeneficiaries'
     | '/transfers/transferlimit'
+    | '/transfers/verify'
     | '/cards/'
     | '/payments/'
     | '/transfers/'
@@ -224,6 +234,7 @@ export interface FileRouteTypes {
     | '/payments/$category'
     | '/transfers/managebeneficiaries'
     | '/transfers/transferlimit'
+    | '/transfers/verify'
     | '/cards'
     | '/payments'
     | '/transfers'
@@ -245,6 +256,7 @@ export interface FileRouteTypes {
     | '/payments/$category'
     | '/transfers/managebeneficiaries'
     | '/transfers/transferlimit'
+    | '/transfers/verify'
     | '/cards/'
     | '/payments/'
     | '/transfers/'
@@ -372,6 +384,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CardsIndexRouteImport
       parentRoute: typeof CardsRoute
     }
+    '/transfers/verify': {
+      id: '/transfers/verify'
+      path: '/verify'
+      fullPath: '/transfers/verify'
+      preLoaderRoute: typeof TransfersVerifyRouteImport
+      parentRoute: typeof TransfersRoute
+    }
     '/transfers/transferlimit': {
       id: '/transfers/transferlimit'
       path: '/transferlimit'
@@ -432,12 +451,14 @@ const PaymentsRouteWithChildren = PaymentsRoute._addFileChildren(
 interface TransfersRouteChildren {
   TransfersManagebeneficiariesRoute: typeof TransfersManagebeneficiariesRoute
   TransfersTransferlimitRoute: typeof TransfersTransferlimitRoute
+  TransfersVerifyRoute: typeof TransfersVerifyRoute
   TransfersIndexRoute: typeof TransfersIndexRoute
 }
 
 const TransfersRouteChildren: TransfersRouteChildren = {
   TransfersManagebeneficiariesRoute: TransfersManagebeneficiariesRoute,
   TransfersTransferlimitRoute: TransfersTransferlimitRoute,
+  TransfersVerifyRoute: TransfersVerifyRoute,
   TransfersIndexRoute: TransfersIndexRoute,
 }
 
@@ -462,3 +483,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
