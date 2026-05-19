@@ -1,11 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Landmark, Zap, Clock, ChevronDown, Plus, User, Users, History,
-  BarChart3, Download, Info, ShieldCheck,
+  BarChart3, Download, Info,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/transfers/")({
@@ -24,15 +24,40 @@ const modes = [
   { key: "RTGS", icon: Clock, sub: "High Value Transfer" },
 ];
 
+const savedBeneficiaries = [
+  { initials: "RA", name: "Rahul Sharma", bank: "HDFC Bank", acct: "XXXX XXXX 9501" },
+  { initials: "NT", name: "Neha Tripathi", bank: "SBI Bank", acct: "XXXX XXXX 1122" },
+  { initials: "VB", name: "Vijay Builders Pvt Ltd", bank: "Axis Bank", acct: "XXXX XXXX 3456" },
+  { initials: "SA", name: "Sunita Agarwal", bank: "ICICI Bank", acct: "XXXX XXXX 8901" },
+];
+
 function TransfersPage() {
+  const navigate = useNavigate();
   const [mode, setMode] = useState("IMPS");
   const [amount, setAmount] = useState("");
   const [remarks, setRemarks] = useState("");
+  const [beneficiary, setBeneficiary] = useState<typeof savedBeneficiaries[number] | null>(null);
+  const [dropOpen, setDropOpen] = useState(false);
+  const dropRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!dropOpen) return;
+    const h = (e: MouseEvent) => {
+      if (dropRef.current && !dropRef.current.contains(e.target as Node)) setDropOpen(false);
+    };
+    setTimeout(() => document.addEventListener("mousedown", h), 0);
+    return () => document.removeEventListener("mousedown", h);
+  }, [dropOpen]);
 
   const onReview = () => {
+    if (!beneficiary) return toast.error("Please select a beneficiary");
     if (!amount) return toast.error("Please enter an amount");
-    toast.success("Transfer initiated — awaiting OTP verification");
+    navigate({
+      to: "/transfers/verify",
+      search: { name: beneficiary.name, bank: beneficiary.bank, acct: beneficiary.acct, amount, mode, remarks },
+    });
   };
+
 
   return (
     <DashboardLayout showGreeting={false}>
