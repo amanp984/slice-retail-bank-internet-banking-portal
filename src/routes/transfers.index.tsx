@@ -217,7 +217,7 @@ function TransfersPage() {
             <ul className="divide-y divide-border">
               {[
                 { i: Users, l: "Manage Beneficiaries", to: "/transfers/managebeneficiaries" },
-                { i: History, l: "Transaction History", to: "/transfers" },
+                { i: History, l: "Transaction History", to: "/transactions" },
                 { i: BarChart3, l: "Transfer Limits", to: "/transfers/transferlimit" },
                 { i: Download, l: "Download Statement", to: "/transfers" },
               ].map(({ i: I, l, to }) => (
