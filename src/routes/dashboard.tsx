@@ -157,7 +157,7 @@ function Dashboard() {
             {[
               ["Account Type", "Current Account"],
               ["Account Number", "​033311501069501"],
-              ["IFSC Code", "SLBK0001234"],
+              ["IFSC Code", "NESF0000333"],
               ["Branch", "Mumbai - Corporate Branch"],
             ].map(([k, v]) => (
               <div key={k}>
