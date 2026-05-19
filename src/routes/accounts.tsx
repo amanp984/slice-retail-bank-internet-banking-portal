@@ -64,7 +64,7 @@ const accountData = {
     balance: "₹0.00",
     holder: "Rambabu",
     number: "XXXX XXXX XXXX 9087",
-    ifsc: "SLCE0001234",
+    ifsc: "NESF0000333",
     type: "Overdraft Account",
     branch: "Mumbai Corporate Branch",
     status: "Active",
