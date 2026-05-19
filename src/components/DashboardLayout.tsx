@@ -1,4 +1,4 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard, Wallet, ArrowLeftRight, Receipt, CreditCard,
@@ -84,10 +84,18 @@ export function DashboardLayout({
   children, showGreeting = false,
 }: { children: ReactNode; showGreeting?: boolean }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
+  const navigate = useNavigate();
   const [modal, setModal] = useState<ModalKind>(null);
   const [openPanel, setOpenPanel] = useState<null | "messages" | "notifs">(null);
   const [readSet, setReadSet] = useState<Set<number>>(new Set());
   const unread = notifs.filter((_, i) => !readSet.has(i) && notifs[i].unread).length;
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!sessionStorage.getItem("slice_auth")) {
+      navigate({ to: "/" });
+    }
+  }, [navigate]);
 
   return (
     <div className="min-h-screen flex bg-background">
