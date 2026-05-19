@@ -14,7 +14,7 @@ export const Route = createFileRoute("/cards/")({
 });
 
 const txns = [
-  { date: "22 May 2024, 10:45 AM", icon: ShoppingBag, desc: "Online Purchase", merchant: "Amazon India", amount: 1299 },
+  { date: "25 December 2025, 10:45 AM", icon: ShoppingBag, desc: "Online Purchase", merchant: "Amazon India", amount: 1299 },
   { date: "21 May 2024, 07:32 PM", icon: Store, desc: "POS Transaction", merchant: "Reliance Smart", amount: 2450 },
   { date: "20 May 2024, 06:15 PM", icon: ShoppingCart, desc: "Online Purchase", merchant: "Flipkart", amount: 3899 },
   { date: "19 May 2024, 03:20 PM", icon: Banknote, desc: "ATM Withdrawal", merchant: "HDFC Bank ATM", amount: 5000 },
