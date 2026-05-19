@@ -118,7 +118,7 @@ function ManageBeneficiaries() {
               {[
                 { i: UserPlus, l: "Add New Beneficiary" },
                 { i: BarChart3, l: "Beneficiary Transfer Limits", to: "/transfers/transferlimit" as const },
-                { i: Trash2, l: "View Deleted Beneficiaries" },
+                { i: Banknote, l: "Fixed deposits" },
                 { i: Bell, l: "Pending Requests" },
               ].map(({ i: I, l, to }) => (
                 <li key={l}>
