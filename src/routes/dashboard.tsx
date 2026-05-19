@@ -116,7 +116,7 @@ function Dashboard() {
             </tbody>
           </table>
           <div className="text-center mt-4">
-            <a className="text-sm font-semibold text-primary cursor-pointer">View All Transactions →</a>
+            <Link to="/transactions" className="text-sm font-semibold text-primary cursor-pointer">View All Transactions →</Link>
           </div>
         </div>
 
