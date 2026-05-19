@@ -119,7 +119,7 @@ function ManageBeneficiaries() {
                 { i: UserPlus, l: "Offers" },
                 { i: PiggyBank, l: "Loans", to: "/transfers/transferlimit" as const },
                 { i: Banknote, l: "Fixed deposits" },
-                { i: Bell, l: "Pending Requests" },
+                { i: Bell, l: "Pending Request" },
               ].map(({ i: I, l, to }) => (
                 <li key={l}>
                   {to ? (
