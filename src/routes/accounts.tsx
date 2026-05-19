@@ -84,7 +84,7 @@ function AccountsPage() {
   const [modal, setModal] = useState<null | "fd" | "loan" | "invest">(null);
   const [toast, setToast] = useState<string | null>(null);
 
-  const data = accountData[active === "loan" ? "current" : active];
+  const data = accountData[active === "loan" || active === "savings" ? "current" : active];
 
   const showToast = (msg: string) => {
     setToast(msg);
@@ -130,71 +130,91 @@ function AccountsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 mt-6">
           {/* Main account card */}
           <AnimatePresence mode="wait">
-            <motion.div
-              key={active}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.25 }}
-              className="bg-card rounded-2xl border border-border shadow-sm p-7"
-            >
-              <div>
-                <h2 className="text-lg font-bold text-foreground">{data.type === "Overdraft Account" ? "OD Account" : data.type === "Savings Account" ? "Savings Account" : "Current Account"}</h2>
-                <p className="text-sm text-muted-foreground mt-0.5">{data.subtitle}</p>
-              </div>
+            {active === "savings" ? (
+              <motion.div
+                key="savings-empty"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.25 }}
+                className="bg-card rounded-2xl border border-border shadow-sm p-10 text-center"
+              >
+                <div className="mx-auto w-14 h-14 rounded-full bg-accent grid place-items-center mb-4">
+                  <Info className="w-7 h-7 text-primary" />
+                </div>
+                <h3 className="font-bold text-foreground">No Savings Account Linked</h3>
+                <p className="text-sm text-muted-foreground mt-2 max-w-sm mx-auto leading-relaxed">
+                  There are currently no savings accounts linked to your customer profile.
+                </p>
+              </motion.div>
+            ) : (
+              <motion.div
+                key={active}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.25 }}
+                className="bg-card rounded-2xl border border-border shadow-sm p-7"
+              >
+                <div>
+                  <h2 className="text-lg font-bold text-foreground">{data.type === "Overdraft Account" ? "OD Account" : "Current Account"}</h2>
+                  <p className="text-sm text-muted-foreground mt-0.5">{data.subtitle}</p>
+                </div>
 
-              <div className="mt-6 flex items-start justify-between gap-6">
-                <div className="flex items-center gap-5">
-                  <div className="w-16 h-16 rounded-full bg-accent grid place-items-center shrink-0">
-                    <Landmark className="w-7 h-7 text-primary" strokeWidth={1.75} />
-                  </div>
-                  <div>
-                    <div className="font-bold text-foreground">{data.name}</div>
-                    <div className="text-sm text-muted-foreground mt-0.5 flex items-center gap-3 flex-wrap">
-                      <span>{data.mask}</span>
-                      <span className="text-[11px] font-semibold text-primary bg-accent px-2 py-0.5 rounded">
-                        {data.badge}
-                      </span>
+                <div className="mt-6 flex items-start justify-between gap-6">
+                  <div className="flex items-center gap-5">
+                    <div className="w-16 h-16 rounded-full bg-accent grid place-items-center shrink-0">
+                      <Landmark className="w-7 h-7 text-primary" strokeWidth={1.75} />
+                    </div>
+                    <div>
+                      <div className="font-bold text-foreground">{data.name}</div>
+                      <div className="text-sm text-muted-foreground mt-0.5 flex items-center gap-3 flex-wrap">
+                        <span>{data.mask}</span>
+                        <span className="text-[11px] font-semibold text-primary bg-accent px-2 py-0.5 rounded">
+                          {data.badge}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="text-right shrink-0">
-                  <div className="text-xs text-muted-foreground">Available Balance</div>
-                  <div className="text-2xl font-bold text-foreground mt-1">{data.balance}</div>
-                </div>
-              </div>
-
-              <div className="mt-6 flex items-center gap-3 bg-accent/60 text-foreground/80 text-sm rounded-lg px-4 py-3">
-                <Info className="w-4 h-4 text-primary shrink-0" />
-                You have no transactions in this account yet.
-              </div>
-
-              <div className="mt-6 divide-y divide-border">
-                {[
-                  ["Account Holder Name", data.holder],
-                  ["Account Number", data.number],
-                  ["IFSC Code", data.ifsc],
-                  ["Account Type", data.type],
-                  ["Branch", data.branch],
-                ].map(([k, v]) => (
-                  <div key={k} className="flex items-center justify-between py-3.5 text-sm">
-                    <span className="text-muted-foreground">{k}</span>
-                    <span className="text-foreground font-medium">{v}</span>
+                  <div className="text-right shrink-0">
+                    <div className="text-xs text-muted-foreground">Available Balance</div>
+                    <div className="text-2xl font-bold text-foreground mt-1">{data.balance}</div>
                   </div>
-                ))}
-                <div className="flex items-center justify-between py-3.5 text-sm">
-                  <span className="text-muted-foreground">Status</span>
-                  <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">
-                    {data.status}
-                  </span>
                 </div>
-                <div className="flex items-center justify-between py-3.5 text-sm">
-                  <span className="text-muted-foreground">Open Date</span>
-                  <span className="text-foreground font-medium">{data.open}</span>
+
+                <div className="mt-6 flex items-center gap-3 bg-accent/60 text-foreground/80 text-sm rounded-lg px-4 py-3">
+                  <Info className="w-4 h-4 text-primary shrink-0" />
+                  You have no transactions in this account yet.
                 </div>
-              </div>
-            </motion.div>
+
+                <div className="mt-6 divide-y divide-border">
+                  {[
+                    ["Account Holder Name", data.holder],
+                    ["Account Number", data.number],
+                    ["IFSC Code", data.ifsc],
+                    ["Account Type", data.type],
+                    ["Branch", data.branch],
+                  ].map(([k, v]) => (
+                    <div key={k} className="flex items-center justify-between py-3.5 text-sm">
+                      <span className="text-muted-foreground">{k}</span>
+                      <span className="text-foreground font-medium">{v}</span>
+                    </div>
+                  ))}
+                  <div className="flex items-center justify-between py-3.5 text-sm">
+                    <span className="text-muted-foreground">Status</span>
+                    <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">
+                      {data.status}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between py-3.5 text-sm">
+                    <span className="text-muted-foreground">Open Date</span>
+                    <span className="text-foreground font-medium">{data.open}</span>
+                  </div>
+                </div>
+              </motion.div>
+            )}
           </AnimatePresence>
+
 
           {/* Right side */}
           <div className="space-y-5">

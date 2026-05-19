@@ -1,11 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Landmark, Zap, Clock, ChevronDown, Plus, User, Users, History,
-  BarChart3, Download, Info, ShieldCheck,
+  BarChart3, Download, Info,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/transfers/")({
@@ -24,15 +24,40 @@ const modes = [
   { key: "RTGS", icon: Clock, sub: "High Value Transfer" },
 ];
 
+const savedBeneficiaries = [
+  { initials: "RA", name: "Rahul Sharma", bank: "HDFC Bank", acct: "XXXX XXXX 9501" },
+  { initials: "NT", name: "Neha Tripathi", bank: "SBI Bank", acct: "XXXX XXXX 1122" },
+  { initials: "VB", name: "Vijay Builders Pvt Ltd", bank: "Axis Bank", acct: "XXXX XXXX 3456" },
+  { initials: "SA", name: "Sunita Agarwal", bank: "ICICI Bank", acct: "XXXX XXXX 8901" },
+];
+
 function TransfersPage() {
+  const navigate = useNavigate();
   const [mode, setMode] = useState("IMPS");
   const [amount, setAmount] = useState("");
   const [remarks, setRemarks] = useState("");
+  const [beneficiary, setBeneficiary] = useState<typeof savedBeneficiaries[number] | null>(null);
+  const [dropOpen, setDropOpen] = useState(false);
+  const dropRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!dropOpen) return;
+    const h = (e: MouseEvent) => {
+      if (dropRef.current && !dropRef.current.contains(e.target as Node)) setDropOpen(false);
+    };
+    setTimeout(() => document.addEventListener("mousedown", h), 0);
+    return () => document.removeEventListener("mousedown", h);
+  }, [dropOpen]);
 
   const onReview = () => {
+    if (!beneficiary) return toast.error("Please select a beneficiary");
     if (!amount) return toast.error("Please enter an amount");
-    toast.success("Transfer initiated — awaiting OTP verification");
+    navigate({
+      to: "/transfers/verify",
+      search: { name: beneficiary.name, bank: beneficiary.bank, acct: beneficiary.acct, amount, mode, remarks },
+    });
   };
+
 
   return (
     <DashboardLayout showGreeting={false}>
@@ -65,22 +90,59 @@ function TransfersPage() {
             <div>
               <label className="text-sm font-semibold text-foreground">Select Beneficiary</label>
               <div className="mt-2 grid grid-cols-[1fr_auto] gap-3">
-                <button className="flex items-center gap-3 p-3.5 rounded-xl border border-border hover:border-primary/40 transition text-left">
-                  <div className="w-10 h-10 rounded-full bg-accent text-primary grid place-items-center">
-                    <User className="w-4 h-4" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-sm font-medium">Select Beneficiary</div>
-                    <div className="text-xs text-muted-foreground">Choose a saved beneficiary</div>
-                  </div>
-                  <ChevronDown className="w-4 h-4 text-muted-foreground" />
-                </button>
+                <div className="relative" ref={dropRef}>
+                  <button
+                    type="button"
+                    onClick={() => setDropOpen((o) => !o)}
+                    className="w-full flex items-center gap-3 p-3.5 rounded-xl border border-border hover:border-primary/40 transition text-left"
+                  >
+                    <div className="w-10 h-10 rounded-full bg-accent text-primary grid place-items-center font-semibold text-xs">
+                      {beneficiary ? beneficiary.initials : <User className="w-4 h-4" />}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-medium truncate">{beneficiary ? beneficiary.name : "Select Beneficiary"}</div>
+                      <div className="text-xs text-muted-foreground truncate">
+                        {beneficiary ? `${beneficiary.bank} • ${beneficiary.acct}` : "Choose a saved beneficiary"}
+                      </div>
+                    </div>
+                    <ChevronDown className={`w-4 h-4 text-muted-foreground transition ${dropOpen ? "rotate-180" : ""}`} />
+                  </button>
+
+                  <AnimatePresence>
+                    {dropOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -6, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -4, scale: 0.98 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute left-0 right-0 top-full mt-2 bg-white rounded-xl border border-border shadow-xl z-30 overflow-hidden"
+                      >
+                        <div className="max-h-72 overflow-y-auto py-1">
+                          {savedBeneficiaries.map((b) => (
+                            <button
+                              key={b.name}
+                              onClick={() => { setBeneficiary(b); setDropOpen(false); }}
+                              className="w-full flex items-center gap-3 px-4 py-2.5 text-left hover:bg-secondary/60 transition"
+                            >
+                              <div className="w-9 h-9 rounded-full bg-accent text-primary grid place-items-center font-semibold text-xs">{b.initials}</div>
+                              <div className="flex-1 min-w-0">
+                                <div className="text-sm font-medium text-foreground truncate">{b.name}</div>
+                                <div className="text-xs text-muted-foreground truncate">{b.bank} • {b.acct}</div>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
                 <Link to="/transfers/managebeneficiaries"
                   className="px-4 rounded-xl border border-primary text-primary text-sm font-semibold hover:bg-accent transition flex items-center gap-1">
                   <Plus className="w-4 h-4" /> Add Beneficiary
                 </Link>
               </div>
             </div>
+
 
             {/* Amount */}
             <div>
@@ -155,7 +217,7 @@ function TransfersPage() {
             <ul className="divide-y divide-border">
               {[
                 { i: Users, l: "Manage Beneficiaries", to: "/transfers/managebeneficiaries" },
-                { i: History, l: "Transaction History", to: "/transfers" },
+                { i: History, l: "Transaction History", to: "/transactions" },
                 { i: BarChart3, l: "Transfer Limits", to: "/transfers/transferlimit" },
                 { i: Download, l: "Download Statement", to: "/transfers" },
               ].map(({ i: I, l, to }) => (

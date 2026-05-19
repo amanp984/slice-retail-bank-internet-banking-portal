@@ -89,7 +89,7 @@ function Dashboard() {
         <div className="col-span-12 lg:col-span-8 bg-card rounded-2xl p-6 shadow-card border border-border">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-bold text-foreground">Recent Transactions</h2>
-            <a className="text-sm font-semibold text-primary cursor-pointer">View All</a>
+            <Link to="/transactions" className="text-sm font-semibold text-primary cursor-pointer">View All</Link>
           </div>
           <table className="w-full text-sm">
             <thead>
@@ -116,7 +116,7 @@ function Dashboard() {
             </tbody>
           </table>
           <div className="text-center mt-4">
-            <a className="text-sm font-semibold text-primary cursor-pointer">View All Transactions →</a>
+            <Link to="/transactions" className="text-sm font-semibold text-primary cursor-pointer">View All Transactions →</Link>
           </div>
         </div>
 
