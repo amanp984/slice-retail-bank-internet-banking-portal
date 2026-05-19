@@ -25,7 +25,7 @@ const quick = [
 ];
 
 const txns = [
-  { date: "22 May 2024, 09:12 AM", desc: "UPI to Amazon Pay", type: "UPI Payment", amount: -1299, balance: 125680.5 },
+  { date: "25 December 2025, 09:12 AM", desc: "UPI to Amazon Pay", type: "UPI Payment", amount: -1299, balance: 125680.5 },
   { date: "21 May 2024, 07:45 PM", desc: "Salary Credit", type: "Credit", amount: 85000, balance: 126979.5 },
   { date: "20 May 2024, 11:30 AM", desc: "Swiggy", type: "UPI Payment", amount: -450, balance: 41979.5 },
   { date: "19 May 2024, 06:20 PM", desc: "Electricity Bill", type: "Bill Payment", amount: -1250, balance: 42429.5 },

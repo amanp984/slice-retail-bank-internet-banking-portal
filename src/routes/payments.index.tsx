@@ -25,7 +25,7 @@ const cats = [
 ];
 
 const recent = [
-  { date: "22 May 2024, 08:45 AM", cat: "Electricity", biller: "TATA Power Delhi", amount: 1249, txn: "PAYN5123456789" },
+  { date: "25 December 2025, 08:45 AM", cat: "Electricity", biller: "TATA Power Delhi", amount: 1249, txn: "PAYN5123456789" },
   { date: "21 May 2024, 07:30 PM", cat: "Mobile", biller: "Airtel Prepaid", amount: 299, txn: "PAYN5123456788" },
   { date: "20 May 2024, 11:15 AM", cat: "Credit Card", biller: "HDFC Bank Credit Card", amount: 25000, txn: "PAYN5123456787" },
   { date: "19 May 2024, 09:05 PM", cat: "Home Loan", biller: "SBI Home Loans", amount: 18500, txn: "PAYN5123456786" },

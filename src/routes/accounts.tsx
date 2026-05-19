@@ -40,7 +40,7 @@ const accountData = {
     type: "Current Account",
     branch: "Mumbai Corporate Branch",
     status: "Active",
-    open: "22 May 2024",
+    open: "25 December 2025",
   },
   savings: {
     name: "Slice Savings Account",
@@ -54,7 +54,7 @@ const accountData = {
     type: "Savings Account",
     branch: "Mumbai Corporate Branch",
     status: "Active",
-    open: "22 May 2024",
+    open: "25 December 2025",
   },
   od: {
     name: "Slice Overdraft Account",
@@ -68,7 +68,7 @@ const accountData = {
     type: "Overdraft Account",
     branch: "Mumbai Corporate Branch",
     status: "Active",
-    open: "22 May 2024",
+    open: "25 December 2025",
   },
 };
 
