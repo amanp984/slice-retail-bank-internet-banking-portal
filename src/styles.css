@@ -79,4 +79,6 @@
   .glass { background: rgba(255,255,255,0.6); backdrop-filter: blur(12px); }
   .shadow-card { box-shadow: 0 1px 3px rgba(20,20,40,0.04), 0 8px 24px -8px rgba(60,40,140,0.08); }
   .shadow-soft { box-shadow: 0 2px 8px rgba(20,20,40,0.04); }
+  .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; width: 0; height: 0; }
 }

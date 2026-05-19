@@ -96,7 +96,7 @@ export function DashboardLayout({
           <div className="text-3xl font-bold tracking-tight italic">slice</div>
           <div className="text-xs tracking-[0.3em] font-semibold opacity-90 mt-0.5">BANK</div>
         </div>
-        <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
+        <nav className="flex-1 px-3 space-y-1 overflow-y-auto no-scrollbar">
           {nav.map((item) => {
             const Icon = item.icon;
             const active = path === item.to || (item.to !== "/dashboard" && path.startsWith(item.to));
@@ -118,7 +118,7 @@ export function DashboardLayout({
           })}
         </nav>
         <div className="px-3 pb-6 pt-2 border-t border-white/10 mt-2">
-          <Link to="/" className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-white/85 hover:bg-white/10">
+          <Link to="/" onClick={() => { try { sessionStorage.removeItem("slice_auth"); } catch {} }} className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-white/85 hover:bg-white/10">
             <LogOut className="w-[18px] h-[18px]" strokeWidth={1.75} /> Log Out
           </Link>
           <div className="px-4 mt-6 text-xs text-white/60">© 2026 Slice Bank.<br/>All rights reserved.</div>
