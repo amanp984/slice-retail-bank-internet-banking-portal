@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { motion } from "framer-motion";
-import { Search, Filter, Plus, MoreVertical, UserPlus, BarChart3, Trash2, Bell, Info, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, Filter, Plus, MoreVertical, UserPlus, BarChart3, Trash2, Bell, Info, ChevronLeft, ChevronRight, Banknote } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/transfers/managebeneficiaries")({
@@ -118,7 +118,7 @@ function ManageBeneficiaries() {
               {[
                 { i: UserPlus, l: "Add New Beneficiary" },
                 { i: BarChart3, l: "Beneficiary Transfer Limits", to: "/transfers/transferlimit" as const },
-                { i: Trash2, l: "View Deleted Beneficiaries" },
+                { i: Banknote, l: "Fixed deposits" },
                 { i: Bell, l: "Pending Requests" },
               ].map(({ i: I, l, to }) => (
                 <li key={l}>
