@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { DashboardLayout } from "@/components/DashboardLayout";
+import { InfoModal } from "@/components/InfoModal";
 import { motion } from "framer-motion";
-import { Search, Filter, Plus, MoreVertical, UserPlus, BarChart3, Trash2, Bell, Info, ChevronLeft, ChevronRight, Banknote, PiggyBank } from "lucide-react";
+import { Search, Filter, Plus, MoreVertical, UserPlus, Bell, Info, ChevronLeft, ChevronRight, Banknote, PiggyBank } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/transfers/managebeneficiaries")({
@@ -16,8 +17,32 @@ const beneficiaries = [
   { initials: "NT", name: "Neha Tripathi", email: "", acct: "XXXX XXXX 1122", bank: "State Bank of India", ifsc: "SBIN0007789", ifscBank: "State Bank of India", type: "Personal" },
 ];
 
+type ModalKey = null | "row" | "add" | "pending";
+
+const modalContent: Record<Exclude<ModalKey, null>, { title: string; message: string; cta: string; variant: "warning" | "info" }> = {
+  row: {
+    title: "Action Restricted",
+    message: "This action cannot be completed through internet banking at this moment. Please use your registered banking channel to continue.",
+    cta: "Okay",
+    variant: "warning",
+  },
+  add: {
+    title: "Beneficiary Addition Restricted",
+    message: "Beneficiary addition is currently unavailable through this portal. Please use your registered banking channel to continue.",
+    cta: "Okay",
+    variant: "warning",
+  },
+  pending: {
+    title: "No Pending Requests",
+    message: "There are currently no pending service requests associated with your account.",
+    cta: "Close",
+    variant: "info",
+  },
+};
+
 function ManageBeneficiaries() {
   const [tab, setTab] = useState<"all" | "req">("all");
+  const [modal, setModal] = useState<ModalKey>(null);
 
   return (
     <DashboardLayout>
@@ -46,7 +71,7 @@ function ManageBeneficiaries() {
                   <input placeholder="Search Beneficiaries" className="pl-9 pr-3 py-2 text-sm border border-border rounded-lg w-56 focus:outline-none focus:border-primary" />
                 </div>
                 <button className="flex items-center gap-1.5 px-3 py-2 text-sm border border-border rounded-lg hover:bg-secondary"><Filter className="w-4 h-4" /> Filter</button>
-                <button className="flex items-center gap-1.5 px-4 py-2 text-sm bg-primary text-primary-foreground rounded-lg font-semibold hover:opacity-90"><Plus className="w-4 h-4" /> Add Beneficiary</button>
+                <button onClick={() => setModal("add")} className="flex items-center gap-1.5 px-4 py-2 text-sm bg-primary text-primary-foreground rounded-lg font-semibold hover:opacity-90"><Plus className="w-4 h-4" /> Add Beneficiary</button>
               </div>
             </div>
 
@@ -89,7 +114,7 @@ function ManageBeneficiaries() {
                         <span className="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-green-100 text-green-700">Active</span>
                       </td>
                       <td className="py-4 text-right">
-                        <button className="p-1.5 hover:bg-secondary rounded-md"><MoreVertical className="w-4 h-4 text-muted-foreground" /></button>
+                        <button onClick={() => setModal("row")} className="p-1.5 hover:bg-secondary rounded-md"><MoreVertical className="w-4 h-4 text-muted-foreground" /></button>
                       </td>
                     </tr>
                   ))}
@@ -116,11 +141,11 @@ function ManageBeneficiaries() {
             <h3 className="font-bold mb-2">Quick Actions</h3>
             <ul className="divide-y divide-border">
               {[
-                { i: UserPlus, l: "Add Beneficiary" },
-                { i: PiggyBank, l: "Loans", to: "/transfers/transferlimit" as const },
-                { i: Banknote, l: "Fixed deposits" },
-                { i: Bell, l: "Pending Request" },
-              ].map(({ i: I, l, to }) => (
+                { i: UserPlus, l: "Add Beneficiary", action: () => setModal("add") },
+                { i: PiggyBank, l: "Loans", to: "/loans" as const },
+                { i: Banknote, l: "Fixed Deposits", to: "/fixeddeposits" as const },
+                { i: Bell, l: "Pending Request", action: () => setModal("pending") },
+              ].map(({ i: I, l, to, action }) => (
                 <li key={l}>
                   {to ? (
                     <Link to={to} className="flex items-center justify-between py-3 text-sm hover:text-primary">
@@ -128,7 +153,7 @@ function ManageBeneficiaries() {
                       <span className="text-muted-foreground">›</span>
                     </Link>
                   ) : (
-                    <button className="w-full flex items-center justify-between py-3 text-sm hover:text-primary">
+                    <button onClick={action} className="w-full flex items-center justify-between py-3 text-sm hover:text-primary">
                       <span className="flex items-center gap-3"><I className="w-4 h-4 text-primary" /> {l}</span>
                       <span className="text-muted-foreground">›</span>
                     </button>
@@ -148,6 +173,15 @@ function ManageBeneficiaries() {
           </div>
         </div>
       </div>
+
+      <InfoModal
+        open={modal !== null}
+        onClose={() => setModal(null)}
+        title={modal ? modalContent[modal].title : ""}
+        message={modal ? modalContent[modal].message : ""}
+        cta={modal ? modalContent[modal].cta : "Okay"}
+        variant={modal ? modalContent[modal].variant : "warning"}
+      />
     </DashboardLayout>
   );
 }
