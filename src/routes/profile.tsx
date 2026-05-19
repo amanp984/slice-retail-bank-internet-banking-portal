@@ -13,7 +13,7 @@ export const Route = createFileRoute("/profile")({
 });
 
 const info = [
-  { i: IdCard, k: "Customer ID", v: "CUST12345678" },
+  { i: IdCard, k: "Customer ID", v: "380008322724" },
   { i: IdCard, k: "Aadhaar Card (Last 4 Digits)", v: "XXXX XXXX 5678" },
   { i: MapPin, k: "Address", v: "123, MG Road, Bengaluru,\nKarnataka - 560001" },
   { i: IdCard, k: "PAN Card Number", v: "ABCDE1234F" },
@@ -40,7 +40,7 @@ function Profile() {
               <div className="w-20 h-20 rounded-full bg-accent text-primary grid place-items-center text-2xl font-bold">RS</div>
               <div>
                 <div className="text-lg font-bold">Rambabu</div>
-                <div className="text-sm text-muted-foreground">Customer ID: CUST12345678</div>
+                <div className="text-sm text-muted-foreground">Customer ID: 380008322724</div>
               </div>
             </div>
 
