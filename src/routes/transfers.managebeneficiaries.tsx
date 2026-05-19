@@ -46,7 +46,7 @@ function ManageBeneficiaries() {
                   <input placeholder="Search Beneficiaries" className="pl-9 pr-3 py-2 text-sm border border-border rounded-lg w-56 focus:outline-none focus:border-primary" />
                 </div>
                 <button className="flex items-center gap-1.5 px-3 py-2 text-sm border border-border rounded-lg hover:bg-secondary"><Filter className="w-4 h-4" /> Filter</button>
-                <button className="flex items-center gap-1.5 px-4 py-2 text-sm bg-primary text-primary-foreground rounded-lg font-semibold hover:opacity-90"><Plus className="w-4 h-4" /> Add New Beneficiary</button>
+                <button className="flex items-center gap-1.5 px-4 py-2 text-sm bg-primary text-primary-foreground rounded-lg font-semibold hover:opacity-90"><Plus className="w-4 h-4" /> Offers</button>
               </div>
             </div>
 
@@ -116,7 +116,7 @@ function ManageBeneficiaries() {
             <h3 className="font-bold mb-2">Quick Actions</h3>
             <ul className="divide-y divide-border">
               {[
-                { i: UserPlus, l: "Add New Beneficiary" },
+                { i: UserPlus, l: "Offers" },
                 { i: BarChart3, l: "Beneficiary Transfer Limits", to: "/transfers/transferlimit" as const },
                 { i: Banknote, l: "Fixed deposits" },
                 { i: Bell, l: "Pending Requests" },
