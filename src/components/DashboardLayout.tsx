@@ -121,7 +121,7 @@ export function DashboardLayout({
           <Link to="/" className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-white/85 hover:bg-white/10">
             <LogOut className="w-[18px] h-[18px]" strokeWidth={1.75} /> Log Out
           </Link>
-          <div className="px-4 mt-6 text-xs text-white/60">© 2024 Slice Bank.<br/>All rights reserved.</div>
+          <div className="px-4 mt-6 text-xs text-white/60">© 2026 Slice Bank.<br/>All rights reserved.</div>
         </div>
       </aside>
 
