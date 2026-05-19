@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { User, Lock, Keyboard, CheckCircle2 } from "lucide-react";
+import { User, Lock, Keyboard, CheckCircle2, PiggyBank } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -64,26 +64,7 @@ function LoginPage() {
             transition={{ duration: 0.8 }}
             className="relative z-10"
           >
-            <svg viewBox="0 0 400 360" className="w-[28rem] max-w-full drop-shadow-2xl">
-              <defs>
-                <linearGradient id="bldg" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0" stopColor="#5cc4ff" /><stop offset="1" stopColor="#2b8edd" />
-                </linearGradient>
-              </defs>
-              <circle cx="290" cy="90" r="60" fill="#ff6b6b" opacity="0.9"/>
-              <circle cx="340" cy="60" r="28" fill="#ff8888" opacity="0.7"/>
-              <circle cx="120" cy="240" r="70" fill="#6c5ce7" opacity="0.35"/>
-              <rect x="80" y="290" width="180" height="22" rx="4" fill="#7c4dff" opacity="0.9"/>
-              <polygon points="200,80 100,160 300,160" fill="url(#bldg)"/>
-              <rect x="100" y="160" width="200" height="20" fill="#3aa0e0"/>
-              {[0,1,2,3,4].map(i => (
-                <rect key={i} x={115 + i*36} y={180} width={22} height={90} rx={3} fill="#5cc4ff" opacity="0.9"/>
-              ))}
-              <rect x="100" y="270" width="200" height="20" fill="#3aa0e0"/>
-              <circle cx="320" cy="220" r="30" fill="none" stroke="#a8d8f0" strokeWidth="6"/>
-              <rect x="40" y="120" width="40" height="6" rx="3" fill="#7ed957"/>
-              <rect x="40" y="140" width="60" height="6" rx="3" fill="#7ed957"/>
-            </svg>
+            <PiggyBank className="w-[20rem] h-[20rem] text-white/90 drop-shadow-2xl" strokeWidth={1} />
           </motion.div>
         </div>
 
