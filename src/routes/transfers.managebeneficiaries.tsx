@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { motion } from "framer-motion";
-import { Search, Filter, Plus, MoreVertical, UserPlus, BarChart3, Trash2, Bell, Info, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, Filter, Plus, MoreVertical, UserPlus, BarChart3, Trash2, Bell, Info, ChevronLeft, ChevronRight, Banknote } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/transfers/managebeneficiaries")({
