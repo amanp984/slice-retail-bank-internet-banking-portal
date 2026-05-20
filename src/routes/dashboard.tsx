@@ -118,7 +118,7 @@ function Dashboard() {
                     <td className="py-3 text-foreground">{fmtDate(t.created_at)}</td>
                     <td className="py-3 text-foreground">{t.description || t.sender_name || "—"}</td>
                     <td className="py-3 text-muted-foreground">{labelType(t.type)}</td>
-                    <td className="py-3 text-right font-medium" style={{ color: t.type === "debit" ? "var(--destructive)" : "var(--success)" }}>
+                    <td className="py-3 text-right font-medium text-foreground tabular-nums">
                       {t.type === "debit" ? "-" : "+"}{fmt(t.amount)}
                     </td>
                     <td className="py-3 text-right text-foreground">{fmt(t.balance_after_transaction)}</td>
