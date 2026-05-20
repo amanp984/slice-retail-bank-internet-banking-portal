@@ -104,17 +104,33 @@ function Dashboard() {
               </tr>
             </thead>
             <tbody>
-              {txns.map((t, i) => (
-                <tr key={i} className="border-b border-border/60 last:border-0 hover:bg-secondary/30">
-                  <td className="py-3 text-foreground">{t.date}</td>
-                  <td className="py-3 text-foreground">{t.desc}</td>
-                  <td className="py-3 text-muted-foreground">{t.type}</td>
-                  <td className={`py-3 text-right font-medium ${t.amount < 0 ? "text-destructive" : "text-success"}`} style={{ color: t.amount < 0 ? "var(--destructive)" : "var(--success)" }}>
-                    {t.amount < 0 ? "-" : "+"}{fmt(t.amount)}
-                  </td>
-                  <td className="py-3 text-right text-foreground">{fmt(t.balance)}</td>
-                </tr>
-              ))}
+              <AnimatePresence initial={false}>
+                {recent.map((t) => (
+                  <motion.tr
+                    key={t.id}
+                    layout
+                    initial={{ opacity: 0, y: -6, backgroundColor: "rgba(34,197,94,0.08)" }}
+                    animate={{ opacity: 1, y: 0, backgroundColor: "rgba(0,0,0,0)" }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.35 }}
+                    className="border-b border-border/60 last:border-0 hover:bg-secondary/30"
+                  >
+                    <td className="py-3 text-foreground">{fmtDate(t.created_at)}</td>
+                    <td className="py-3 text-foreground">{t.description || t.sender_name || "—"}</td>
+                    <td className="py-3 text-muted-foreground">{labelType(t.type)}</td>
+                    <td className="py-3 text-right font-medium" style={{ color: t.type === "debit" ? "var(--destructive)" : "var(--success)" }}>
+                      {t.type === "debit" ? "-" : "+"}{fmt(t.amount)}
+                    </td>
+                    <td className="py-3 text-right text-foreground">{fmt(t.balance_after_transaction)}</td>
+                  </motion.tr>
+                ))}
+              </AnimatePresence>
+              {!loading && recent.length === 0 && (
+                <tr><td colSpan={5} className="py-8 text-center text-sm text-muted-foreground">No transactions yet</td></tr>
+              )}
+              {loading && recent.length === 0 && (
+                <tr><td colSpan={5} className="py-8 text-center text-sm text-muted-foreground">Loading…</td></tr>
+              )}
             </tbody>
           </table>
           <div className="text-center mt-4">
