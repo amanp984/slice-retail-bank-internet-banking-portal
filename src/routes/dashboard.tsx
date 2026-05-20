@@ -6,6 +6,7 @@ import {
   FileText, FileSpreadsheet, FileType, MonitorPlay, Users, FileCheck2, Settings, ShieldCheck, Landmark, X, Info
 } from "lucide-react";
 import { useState } from "react";
+import { useTransactions } from "@/hooks/useTransactions";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -24,18 +25,19 @@ const quick = [
   { icon: Download, title: "Download Statement", desc: "View and download your account statements", cta: "Download", to: "/dashboard" },
 ];
 
-const txns = [
-  { date: "25 December 2025, 09:12 AM", desc: "UPI to Amazon Pay", type: "UPI Payment", amount: -1299, balance: 125680.5 },
-  { date: "21 May 2024, 07:45 PM", desc: "Salary Credit", type: "Credit", amount: 85000, balance: 126979.5 },
-  { date: "20 May 2024, 11:30 AM", desc: "Swiggy", type: "UPI Payment", amount: -450, balance: 41979.5 },
-  { date: "19 May 2024, 06:20 PM", desc: "Electricity Bill", type: "Bill Payment", amount: -1250, balance: 42429.5 },
-  { date: "18 May 2024, 10:05 AM", desc: "Money Transfer to Rahul", type: "IMPS", amount: -5000, balance: 43679.5 },
-];
-
 const fmt = (n: number) => new Intl.NumberFormat("en-IN", { minimumFractionDigits: 2 }).format(Math.abs(n));
+const fmtDate = (iso: string) => {
+  const d = new Date(iso);
+  return d.toLocaleString("en-IN", { day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" });
+};
+const labelType = (t: "credit" | "debit") => (t === "credit" ? "Credit" : "Debit");
 
 function Dashboard() {
   const [show, setShow] = useState(true);
+  const { txns, balance, loading } = useTransactions(5);
+  const recent = txns.slice(0, 5);
+  const balanceInt = Math.floor(balance);
+  const balanceDec = (Math.abs(balance) % 1).toFixed(2).slice(1); // ".50"
   return (
     <DashboardLayout showGreeting>
       <div className="grid grid-cols-12 gap-5">
@@ -51,8 +53,8 @@ function Dashboard() {
           <div className="flex items-center gap-2 mt-0.5 h-9">
             <AnimatePresence mode="wait" initial={false}>
               {show ? (
-                <motion.span key="v" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={{ duration: 0.18 }}
-                  className="text-2xl font-bold tabular-nums">₹1,25,680<span className="text-sm">.50</span></motion.span>
+                <motion.span key={`v-${balance}`} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={{ duration: 0.18 }}
+                  className="text-2xl font-bold tabular-nums">₹{new Intl.NumberFormat("en-IN").format(balanceInt)}<span className="text-sm">{balanceDec}</span></motion.span>
               ) : (
                 <motion.span key="h" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={{ duration: 0.18 }}
                   className="text-2xl font-bold tracking-widest">₹ ••••••••</motion.span>
@@ -64,7 +66,7 @@ function Dashboard() {
             </button>
           </div>
           <div className="grid grid-cols-2 gap-3 mt-3 text-[11px]">
-            <div><div className="opacity-80">Total Balance</div><div className="font-semibold text-sm">{show ? "₹1,25,680.50" : "₹ ••••••"}</div></div>
+            <div><div className="opacity-80">Total Balance</div><div className="font-semibold text-sm">{show ? `₹${fmt(balance)}` : "₹ ••••••"}</div></div>
             <div><div className="opacity-80">Uncleared</div><div className="font-semibold text-sm">{show ? "₹0.00" : "₹ ••••"}</div></div>
           </div>
           <Link to="/accounts" className="inline-block mt-4 px-3.5 py-1.5 rounded-lg bg-white text-primary text-xs font-semibold hover:bg-white/90 transition active:scale-[0.98] shadow-sm">View Account Details</Link>
@@ -102,17 +104,33 @@ function Dashboard() {
               </tr>
             </thead>
             <tbody>
-              {txns.map((t, i) => (
-                <tr key={i} className="border-b border-border/60 last:border-0 hover:bg-secondary/30">
-                  <td className="py-3 text-foreground">{t.date}</td>
-                  <td className="py-3 text-foreground">{t.desc}</td>
-                  <td className="py-3 text-muted-foreground">{t.type}</td>
-                  <td className={`py-3 text-right font-medium ${t.amount < 0 ? "text-destructive" : "text-success"}`} style={{ color: t.amount < 0 ? "var(--destructive)" : "var(--success)" }}>
-                    {t.amount < 0 ? "-" : "+"}{fmt(t.amount)}
-                  </td>
-                  <td className="py-3 text-right text-foreground">{fmt(t.balance)}</td>
-                </tr>
-              ))}
+              <AnimatePresence initial={false}>
+                {recent.map((t) => (
+                  <motion.tr
+                    key={t.id}
+                    layout
+                    initial={{ opacity: 0, y: -6, backgroundColor: "rgba(34,197,94,0.08)" }}
+                    animate={{ opacity: 1, y: 0, backgroundColor: "rgba(0,0,0,0)" }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.35 }}
+                    className="border-b border-border/60 last:border-0 hover:bg-secondary/30"
+                  >
+                    <td className="py-3 text-foreground">{fmtDate(t.created_at)}</td>
+                    <td className="py-3 text-foreground">{t.description || t.sender_name || "—"}</td>
+                    <td className="py-3 text-muted-foreground">{labelType(t.type)}</td>
+                    <td className="py-3 text-right font-medium" style={{ color: t.type === "debit" ? "var(--destructive)" : "var(--success)" }}>
+                      {t.type === "debit" ? "-" : "+"}{fmt(t.amount)}
+                    </td>
+                    <td className="py-3 text-right text-foreground">{fmt(t.balance_after_transaction)}</td>
+                  </motion.tr>
+                ))}
+              </AnimatePresence>
+              {!loading && recent.length === 0 && (
+                <tr><td colSpan={5} className="py-8 text-center text-sm text-muted-foreground">No transactions yet</td></tr>
+              )}
+              {loading && recent.length === 0 && (
+                <tr><td colSpan={5} className="py-8 text-center text-sm text-muted-foreground">Loading…</td></tr>
+              )}
             </tbody>
           </table>
           <div className="text-center mt-4">
