@@ -53,8 +53,8 @@ function Dashboard() {
           <div className="flex items-center gap-2 mt-0.5 h-9">
             <AnimatePresence mode="wait" initial={false}>
               {show ? (
-                <motion.span key="v" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={{ duration: 0.18 }}
-                  className="text-2xl font-bold tabular-nums">₹1,25,680<span className="text-sm">.50</span></motion.span>
+                <motion.span key={`v-${balance}`} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={{ duration: 0.18 }}
+                  className="text-2xl font-bold tabular-nums">₹{new Intl.NumberFormat("en-IN").format(balanceInt)}<span className="text-sm">{balanceDec}</span></motion.span>
               ) : (
                 <motion.span key="h" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={{ duration: 0.18 }}
                   className="text-2xl font-bold tracking-widest">₹ ••••••••</motion.span>
@@ -66,7 +66,7 @@ function Dashboard() {
             </button>
           </div>
           <div className="grid grid-cols-2 gap-3 mt-3 text-[11px]">
-            <div><div className="opacity-80">Total Balance</div><div className="font-semibold text-sm">{show ? "₹1,25,680.50" : "₹ ••••••"}</div></div>
+            <div><div className="opacity-80">Total Balance</div><div className="font-semibold text-sm">{show ? `₹${fmt(balance)}` : "₹ ••••••"}</div></div>
             <div><div className="opacity-80">Uncleared</div><div className="font-semibold text-sm">{show ? "₹0.00" : "₹ ••••"}</div></div>
           </div>
           <Link to="/accounts" className="inline-block mt-4 px-3.5 py-1.5 rounded-lg bg-white text-primary text-xs font-semibold hover:bg-white/90 transition active:scale-[0.98] shadow-sm">View Account Details</Link>
