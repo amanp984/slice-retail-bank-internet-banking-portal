@@ -2,59 +2,38 @@ import { createFileRoute } from "@tanstack/react-router";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { ChevronLeft, ChevronRight, Search, Download } from "lucide-react";
 import { useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useTransactions } from "@/hooks/useTransactions";
 
 export const Route = createFileRoute("/transactions")({
   head: () => ({ meta: [{ title: "Transaction History — Slice Bank" }] }),
   component: TransactionsPage,
 });
 
-type Txn = { date: string; desc: string; type: string; amount: number; balance: number; status: "Success" | "Pending" | "Failed" };
-
-const data: Txn[] = [
-  { date: "25 Dec 2025, 09:12 AM", desc: "UPI to Amazon Pay", type: "UPI Payment", amount: -1299, balance: 125680.5, status: "Success" },
-  { date: "24 Dec 2025, 06:40 PM", desc: "Swiggy Order", type: "UPI Payment", amount: -589, balance: 126979.5, status: "Success" },
-  { date: "23 Dec 2025, 11:20 AM", desc: "Salary Credit", type: "Credit", amount: 85000, balance: 127568.5, status: "Success" },
-  { date: "22 Dec 2025, 02:08 PM", desc: "Electricity Bill", type: "Bill Payment", amount: -2150, balance: 42568.5, status: "Success" },
-  { date: "21 Dec 2025, 10:15 AM", desc: "IMPS Transfer to Rahul", type: "IMPS", amount: -7500, balance: 44718.5, status: "Success" },
-  { date: "20 Dec 2025, 07:45 PM", desc: "ATM Withdrawal", type: "ATM", amount: -5000, balance: 52218.5, status: "Success" },
-  { date: "19 Dec 2025, 08:30 AM", desc: "POS - Reliance Fresh", type: "POS", amount: -2840, balance: 57218.5, status: "Success" },
-  { date: "18 Dec 2025, 03:25 PM", desc: "GST Payment", type: "Tax", amount: -12500, balance: 60058.5, status: "Success" },
-  { date: "17 Dec 2025, 12:10 PM", desc: "NEFT to Vijay Builders", type: "NEFT", amount: -45000, balance: 72558.5, status: "Success" },
-  { date: "16 Dec 2025, 09:05 AM", desc: "Interest Credit", type: "Credit", amount: 312.5, balance: 117558.5, status: "Success" },
-
-  { date: "15 Dec 2025, 06:30 PM", desc: "Zomato Order", type: "UPI Payment", amount: -460, balance: 117246, status: "Success" },
-  { date: "14 Dec 2025, 11:45 AM", desc: "Mobile Recharge - Jio", type: "Bill Payment", amount: -399, balance: 117706, status: "Success" },
-  { date: "13 Dec 2025, 04:20 PM", desc: "RTGS to Supplier", type: "RTGS", amount: -250000, balance: 118105, status: "Success" },
-  { date: "12 Dec 2025, 02:00 PM", desc: "Cheque Deposit", type: "Credit", amount: 180000, balance: 368105, status: "Success" },
-  { date: "11 Dec 2025, 09:18 AM", desc: "Insurance Premium", type: "Bill Payment", amount: -8400, balance: 188105, status: "Success" },
-  { date: "10 Dec 2025, 07:55 PM", desc: "BookMyShow", type: "UPI Payment", amount: -640, balance: 196505, status: "Success" },
-  { date: "09 Dec 2025, 03:10 PM", desc: "IMPS from Neha", type: "IMPS", amount: 5000, balance: 197145, status: "Success" },
-  { date: "08 Dec 2025, 10:40 AM", desc: "POS - HP Petrol Pump", type: "POS", amount: -2000, balance: 192145, status: "Success" },
-  { date: "07 Dec 2025, 08:20 AM", desc: "DTH Recharge - Tata Sky", type: "Bill Payment", amount: -499, balance: 194145, status: "Success" },
-  { date: "06 Dec 2025, 06:15 PM", desc: "Amazon Refund", type: "Credit", amount: 1299, balance: 194644, status: "Success" },
-
-  { date: "05 Dec 2025, 12:30 PM", desc: "UPI to Sunita Agarwal", type: "UPI Payment", amount: -3500, balance: 193345, status: "Success" },
-  { date: "04 Dec 2025, 09:50 AM", desc: "Water Bill - BMC", type: "Bill Payment", amount: -780, balance: 196845, status: "Success" },
-  { date: "03 Dec 2025, 04:45 PM", desc: "POS - Croma", type: "POS", amount: -18999, balance: 197625, status: "Success" },
-  { date: "02 Dec 2025, 11:25 AM", desc: "NEFT Credit - Client", type: "NEFT", amount: 75000, balance: 216624, status: "Success" },
-  { date: "01 Dec 2025, 08:10 AM", desc: "EMI - Auto Debit", type: "Auto Debit", amount: -15750, balance: 141624, status: "Success" },
-  { date: "30 Nov 2025, 07:30 PM", desc: "Big Bazaar", type: "POS", amount: -3240, balance: 157374, status: "Success" },
-  { date: "29 Nov 2025, 02:50 PM", desc: "UPI to Maid", type: "UPI Payment", amount: -4500, balance: 160614, status: "Success" },
-  { date: "28 Nov 2025, 11:00 AM", desc: "Gas Bill - MGL", type: "Bill Payment", amount: -1140, balance: 165114, status: "Success" },
-  { date: "27 Nov 2025, 10:20 AM", desc: "ATM Withdrawal", type: "ATM", amount: -10000, balance: 166254, status: "Success" },
-  { date: "26 Nov 2025, 06:00 PM", desc: "UPI to Auto Driver", type: "UPI Payment", amount: -180, balance: 176254, status: "Success" },
-];
-
 const fmt = (n: number) => new Intl.NumberFormat("en-IN", { minimumFractionDigits: 2 }).format(Math.abs(n));
+const fmtDate = (iso: string) => {
+  const d = new Date(iso);
+  return d.toLocaleString("en-IN", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+};
 
 function TransactionsPage() {
   const [page, setPage] = useState(1);
   const [q, setQ] = useState("");
   const pageSize = 10;
+  const { txns, loading } = useTransactions(200);
 
-  const filtered = useMemo(() =>
-    data.filter((t) => t.desc.toLowerCase().includes(q.toLowerCase()) || t.type.toLowerCase().includes(q.toLowerCase())),
-    [q]);
+  const filtered = useMemo(
+    () =>
+      txns.filter((t) => {
+        const s = q.toLowerCase();
+        return (
+          (t.description ?? "").toLowerCase().includes(s) ||
+          (t.sender_name ?? "").toLowerCase().includes(s) ||
+          t.type.includes(s)
+        );
+      }),
+    [q, txns]
+  );
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const slice = filtered.slice((page - 1) * pageSize, page * pageSize);
@@ -98,22 +77,35 @@ function TransactionsPage() {
               </tr>
             </thead>
             <tbody>
-              {slice.map((t, i) => (
-                <tr key={i} className="border-b border-border/60 last:border-0 hover:bg-secondary/30">
-                  <td className="py-3 text-foreground whitespace-nowrap">{t.date}</td>
-                  <td className="py-3 text-foreground">{t.desc}</td>
-                  <td className="py-3 text-muted-foreground">{t.type}</td>
-                  <td className="py-3 text-right font-medium" style={{ color: t.amount < 0 ? "var(--destructive)" : "var(--success)" }}>
-                    {t.amount < 0 ? "-" : "+"}{fmt(t.amount)}
-                  </td>
-                  <td className="py-3 text-right text-foreground">{fmt(t.balance)}</td>
-                  <td className="py-3 text-right">
-                    <span className="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-green-100 text-green-700">{t.status}</span>
-                  </td>
-                </tr>
-              ))}
-              {slice.length === 0 && (
+              <AnimatePresence initial={false}>
+                {slice.map((t) => (
+                  <motion.tr
+                    key={t.id}
+                    layout
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="border-b border-border/60 last:border-0 hover:bg-secondary/30"
+                  >
+                    <td className="py-3 text-foreground whitespace-nowrap">{fmtDate(t.created_at)}</td>
+                    <td className="py-3 text-foreground">{t.description || t.sender_name || "—"}</td>
+                    <td className="py-3 text-muted-foreground">{t.type === "credit" ? "Credit" : "Debit"}</td>
+                    <td className="py-3 text-right font-medium" style={{ color: t.type === "debit" ? "var(--destructive)" : "var(--success)" }}>
+                      {t.type === "debit" ? "-" : "+"}{fmt(t.amount)}
+                    </td>
+                    <td className="py-3 text-right text-foreground">{fmt(t.balance_after_transaction)}</td>
+                    <td className="py-3 text-right">
+                      <span className="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-green-100 text-green-700">Success</span>
+                    </td>
+                  </motion.tr>
+                ))}
+              </AnimatePresence>
+              {!loading && slice.length === 0 && (
                 <tr><td colSpan={6} className="py-10 text-center text-sm text-muted-foreground">No transactions found</td></tr>
+              )}
+              {loading && slice.length === 0 && (
+                <tr><td colSpan={6} className="py-10 text-center text-sm text-muted-foreground">Loading…</td></tr>
               )}
             </tbody>
           </table>
