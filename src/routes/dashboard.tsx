@@ -109,7 +109,7 @@ function Dashboard() {
                   <motion.tr
                     key={t.id}
                     layout
-                    initial={{ opacity: 0, y: -6, backgroundColor: "rgba(34,197,94,0.08)" }}
+                    initial={{ opacity: 0, y: -6, backgroundColor: "rgba(0,0,0,0.04)" }}
                     animate={{ opacity: 1, y: 0, backgroundColor: "rgba(0,0,0,0)" }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.35 }}
