@@ -109,7 +109,7 @@ function Dashboard() {
                   <motion.tr
                     key={t.id}
                     layout
-                    initial={{ opacity: 0, y: -6, backgroundColor: "rgba(34,197,94,0.08)" }}
+                    initial={{ opacity: 0, y: -6, backgroundColor: "rgba(0,0,0,0.04)" }}
                     animate={{ opacity: 1, y: 0, backgroundColor: "rgba(0,0,0,0)" }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.35 }}
@@ -118,7 +118,7 @@ function Dashboard() {
                     <td className="py-3 text-foreground">{fmtDate(t.created_at)}</td>
                     <td className="py-3 text-foreground">{t.description || t.sender_name || "—"}</td>
                     <td className="py-3 text-muted-foreground">{labelType(t.type)}</td>
-                    <td className="py-3 text-right font-medium" style={{ color: t.type === "debit" ? "var(--destructive)" : "var(--success)" }}>
+                    <td className="py-3 text-right font-medium text-foreground tabular-nums">
                       {t.type === "debit" ? "-" : "+"}{fmt(t.amount)}
                     </td>
                     <td className="py-3 text-right text-foreground">{fmt(t.balance_after_transaction)}</td>
