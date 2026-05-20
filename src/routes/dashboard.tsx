@@ -6,6 +6,7 @@ import {
   FileText, FileSpreadsheet, FileType, MonitorPlay, Users, FileCheck2, Settings, ShieldCheck, Landmark, X, Info
 } from "lucide-react";
 import { useState } from "react";
+import { useTransactions } from "@/hooks/useTransactions";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -24,18 +25,19 @@ const quick = [
   { icon: Download, title: "Download Statement", desc: "View and download your account statements", cta: "Download", to: "/dashboard" },
 ];
 
-const txns = [
-  { date: "25 December 2025, 09:12 AM", desc: "UPI to Amazon Pay", type: "UPI Payment", amount: -1299, balance: 125680.5 },
-  { date: "21 May 2024, 07:45 PM", desc: "Salary Credit", type: "Credit", amount: 85000, balance: 126979.5 },
-  { date: "20 May 2024, 11:30 AM", desc: "Swiggy", type: "UPI Payment", amount: -450, balance: 41979.5 },
-  { date: "19 May 2024, 06:20 PM", desc: "Electricity Bill", type: "Bill Payment", amount: -1250, balance: 42429.5 },
-  { date: "18 May 2024, 10:05 AM", desc: "Money Transfer to Rahul", type: "IMPS", amount: -5000, balance: 43679.5 },
-];
-
 const fmt = (n: number) => new Intl.NumberFormat("en-IN", { minimumFractionDigits: 2 }).format(Math.abs(n));
+const fmtDate = (iso: string) => {
+  const d = new Date(iso);
+  return d.toLocaleString("en-IN", { day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" });
+};
+const labelType = (t: "credit" | "debit") => (t === "credit" ? "Credit" : "Debit");
 
 function Dashboard() {
   const [show, setShow] = useState(true);
+  const { txns, balance, loading } = useTransactions(5);
+  const recent = txns.slice(0, 5);
+  const balanceInt = Math.floor(balance);
+  const balanceDec = (Math.abs(balance) % 1).toFixed(2).slice(1); // ".50"
   return (
     <DashboardLayout showGreeting>
       <div className="grid grid-cols-12 gap-5">
