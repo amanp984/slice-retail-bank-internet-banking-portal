@@ -135,7 +135,7 @@ function Dashboard() {
           <div className="grid grid-cols-2 gap-3">
             {[
               { Icon: FileType, label: "PDF", sub: "Download PDF" },
-              { Icon: FileSpreadsheet, label: "Excel", sub: "Download Excel" },
+              { Icon: Eye, label: "View Statement", sub: "View Online" },
               { Icon: FileText, label: "CSV", sub: "Download CSV" },
               { Icon: MonitorPlay, label: "View Online", sub: "View Statement" },
             ].map(({ Icon, label, sub }) => (
