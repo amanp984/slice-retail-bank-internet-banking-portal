@@ -8,7 +8,7 @@ const anon =
 if (!url || !anon) {
   // eslint-disable-next-line no-console
   console.warn(
-    "[supabase] Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY. Set them in your Vercel env vars."
+    "[supabase] Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY / VITE_SUPABASE_PUBLISHABLE_KEY. Set them in your Vercel env vars."
   );
 }
 
