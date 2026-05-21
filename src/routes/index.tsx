@@ -31,7 +31,7 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [captcha, setCaptcha] = useState("");
-  const [captchaCode, setCaptchaCode] = useState(() => makeCaptcha());
+  const [captchaCode, setCaptchaCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [error, setError] = useState<null | { title: string; msg: string }>(null);
@@ -42,6 +42,7 @@ function LoginPage() {
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    setCaptchaCode(makeCaptcha());
     return () => { document.body.style.overflow = prev; };
   }, []);
 
