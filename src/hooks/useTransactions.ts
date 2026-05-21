@@ -9,10 +9,6 @@ type State = {
   configured: boolean;
 };
 
-// Optional account filter. If unset, the dashboard shows ALL transactions
-// in the table (works regardless of which account_reference the webhook used).
-const ACCOUNT_REF = (import.meta.env.VITE_ACCOUNT_REFERENCE as string | undefined) || "";
-
 export function useTransactions(limit = 50) {
   const [state, setState] = useState<State>({
     txns: [],
@@ -30,15 +26,15 @@ export function useTransactions(limit = 50) {
 
     let mounted = true;
 
+    const sortNewestFirst = (rows: Txn[]) =>
+      [...rows].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
     const load = async () => {
-      let q = supabase
+      const { data, error } = await supabase
         .from("transactions")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(limit);
-      if (ACCOUNT_REF) q = q.eq("account_reference", ACCOUNT_REF);
-
-      const { data, error } = await q;
 
       if (!mounted) return;
       if (error) {
@@ -47,7 +43,7 @@ export function useTransactions(limit = 50) {
         setState((s) => ({ ...s, loading: false, error: error.message }));
         return;
       }
-      const txns = (data ?? []) as Txn[];
+      const txns = sortNewestFirst((data ?? []) as Txn[]);
       setState({
         txns,
         balance: Number(txns[0]?.balance_after_transaction ?? 0),
@@ -60,23 +56,25 @@ export function useTransactions(limit = 50) {
     load();
 
     const channel = supabase
-      .channel("public:transactions")
+      .channel(`public:transactions:${limit}`)
       .on(
         "postgres_changes",
-        ACCOUNT_REF
-          ? {
-              event: "INSERT",
-              schema: "public",
-              table: "transactions",
-              filter: `account_reference=eq.${ACCOUNT_REF}`,
-            }
-          : { event: "INSERT", schema: "public", table: "transactions" },
+        { event: "*", schema: "public", table: "transactions" },
         (payload) => {
-          const t = payload.new as Txn;
+          if (!mounted) return;
           setState((s) => {
-            if (s.txns.some((x) => x.id === t.id)) return s;
-            const next = [t, ...s.txns].slice(0, limit);
-            return { ...s, txns: next, balance: Number(t.balance_after_transaction ?? s.balance) };
+            if (payload.eventType === "DELETE") {
+              const deletedId = (payload.old as Partial<Txn>).id;
+              const next = s.txns.filter((txn) => txn.id !== deletedId);
+              return { ...s, txns: next, balance: Number(next[0]?.balance_after_transaction ?? s.balance) };
+            }
+
+            const t = payload.new as Txn;
+            const merged = s.txns.some((txn) => txn.id === t.id)
+              ? s.txns.map((txn) => (txn.id === t.id ? t : txn))
+              : [t, ...s.txns];
+            const next = sortNewestFirst(merged).slice(0, limit);
+            return { ...s, txns: next, balance: Number(next[0]?.balance_after_transaction ?? s.balance) };
           });
         }
       )
