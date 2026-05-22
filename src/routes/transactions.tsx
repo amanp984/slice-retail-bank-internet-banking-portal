@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, Search, Download } from "lucide-react";
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTransactions } from "@/hooks/useTransactions";
+import { formatDescription } from "@/lib/formatTxn";
 
 export const Route = createFileRoute("/transactions")({
   head: () => ({ meta: [{ title: "Transaction History — Slice Bank" }] }),
