@@ -7,6 +7,10 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { useTransactions } from "@/hooks/useTransactions";
+
+const fmtINR = (n: number) =>
+  "₹" + new Intl.NumberFormat("en-IN", { minimumFractionDigits: 2 }).format(Math.abs(n));
 
 export const Route = createFileRoute("/transfers/")({
   head: () => ({
