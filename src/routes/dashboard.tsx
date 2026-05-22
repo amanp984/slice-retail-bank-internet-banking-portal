@@ -118,7 +118,7 @@ function Dashboard() {
                     className="border-b border-border/60 last:border-0 hover:bg-secondary/30"
                   >
                     <td className="py-3 text-foreground">{fmtDate(t.created_at)}</td>
-                    <td className="py-3 text-foreground">{t.description || t.sender_name || "—"}</td>
+                    <td className="py-3 text-foreground">{formatDescription(t)}</td>
                     <td className="py-3 text-muted-foreground">{labelType(t.type)}</td>
                     <td className="py-3 text-right font-medium text-foreground tabular-nums">
                       {t.type === "debit" ? "-" : "+"}{fmt(t.amount)}
