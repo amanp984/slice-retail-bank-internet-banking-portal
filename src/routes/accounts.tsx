@@ -87,8 +87,10 @@ function AccountsPage() {
   const [active, setActive] = useState<TabKey>("current");
   const [modal, setModal] = useState<null | "fd" | "loan" | "invest">(null);
   const [toast, setToast] = useState<string | null>(null);
+  const { balance } = useTransactions(50);
 
-  const data = accountData[active === "loan" || active === "savings" ? "current" : active];
+  const baseData = accountData[active === "loan" || active === "savings" ? "current" : active];
+  const data = active === "current" ? { ...baseData, balance: fmtINR(balance) } : baseData;
 
   const showToast = (msg: string) => {
     setToast(msg);
