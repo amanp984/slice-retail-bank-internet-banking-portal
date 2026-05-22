@@ -85,7 +85,7 @@ function TransfersPage() {
                 </div>
                 <div className="text-right">
                   <div className="text-xs text-muted-foreground">Available Balance</div>
-                  <div className="font-semibold">₹1,24,560.00</div>
+                  <div className="font-semibold">{fmtINR(balance)}</div>
                 </div>
                 <ChevronDown className="w-4 h-4 text-muted-foreground" />
               </div>
