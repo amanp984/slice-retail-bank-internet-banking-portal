@@ -27,8 +27,9 @@ function TransactionsPage() {
     () =>
       txns.filter((t) => {
         const s = q.toLowerCase();
+        const desc = formatDescription(t).toLowerCase();
         return (
-          (t.description ?? "").toLowerCase().includes(s) ||
+          desc.includes(s) ||
           (t.sender_name ?? "").toLowerCase().includes(s) ||
           t.type.includes(s)
         );
