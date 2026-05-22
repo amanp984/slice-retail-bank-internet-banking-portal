@@ -36,7 +36,8 @@ const labelType = (t: "credit" | "debit") => (t === "credit" ? "Credit" : "Debit
 
 function Dashboard() {
   const [show, setShow] = useState(true);
-  const { txns, balance, loading } = useTransactions(5);
+  const navigate = useNavigate();
+  const { txns, balance, loading } = useTransactions(50);
   const recent = txns.slice(0, 5);
   const balanceInt = Math.floor(balance);
   const balanceDec = (Math.abs(balance) % 1).toFixed(2).slice(1); // ".50"
