@@ -43,6 +43,7 @@ function TransfersPage() {
   const [beneficiary, setBeneficiary] = useState<typeof savedBeneficiaries[number] | null>(null);
   const [dropOpen, setDropOpen] = useState(false);
   const dropRef = useRef<HTMLDivElement>(null);
+  const { balance } = useTransactions(50);
 
   useEffect(() => {
     if (!dropOpen) return;
