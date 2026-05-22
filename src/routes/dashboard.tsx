@@ -155,12 +155,12 @@ function Dashboard() {
           </select>
           <div className="grid grid-cols-2 gap-3">
             {[
-              { Icon: FileType, label: "PDF", sub: "Download PDF" },
-              { Icon: Eye, label: "View Statement", sub: "View Online" },
-              { Icon: FileText, label: "CSV", sub: "Download CSV" },
-              { Icon: MonitorPlay, label: "View Online", sub: "View Statement" },
-            ].map(({ Icon, label, sub }) => (
-              <button key={label} className="flex items-center gap-2 p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-accent/40 transition text-left">
+              { Icon: FileType, label: "PDF", sub: "Download PDF", onClick: () => downloadStatementPdf(recent, balance) },
+              { Icon: Eye, label: "View Statement", sub: "View Online", onClick: () => navigate({ to: "/transactions" }) },
+              { Icon: FileText, label: "CSV", sub: "Download CSV", onClick: () => downloadStatementCsv(recent) },
+              { Icon: MonitorPlay, label: "View Online", sub: "View Statement", onClick: () => navigate({ to: "/transactions" }) },
+            ].map(({ Icon, label, sub, onClick }) => (
+              <button key={label} onClick={onClick} className="flex items-center gap-2 p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-accent/40 transition text-left">
                 <Icon className="w-5 h-5 text-primary" />
                 <div><div className="text-xs font-semibold">{label}</div><div className="text-[10px] text-muted-foreground">{sub}</div></div>
               </button>
