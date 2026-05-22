@@ -66,7 +66,12 @@ function LoginPage() {
     }
     setLoading(true);
     setTimeout(() => {
-      try { sessionStorage.setItem("slice_auth", "1"); } catch {}
+      try {
+        sessionStorage.setItem("slice_auth", "1");
+        const now = new Date().toISOString();
+        sessionStorage.setItem("slice_login_at", now);
+        localStorage.setItem("slice_last_login_at", now);
+      } catch {}
       setLoading(false);
       setShowSuccess(true);
       setTimeout(() => {

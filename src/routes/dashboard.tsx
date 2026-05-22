@@ -1,12 +1,14 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeftRight, Receipt, ConciergeBell, Download, Eye, EyeOff,
-  FileText, FileSpreadsheet, FileType, MonitorPlay, Users, FileCheck2, Settings, ShieldCheck, Landmark, X, Info
+  FileText, FileType, MonitorPlay, Users, FileCheck2, Settings, ShieldCheck, Landmark, X, Info
 } from "lucide-react";
 import { useState } from "react";
 import { useTransactions } from "@/hooks/useTransactions";
+import { formatDescription } from "@/lib/formatTxn";
+import { downloadStatementPdf, downloadStatementCsv } from "@/lib/statement";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -34,7 +36,8 @@ const labelType = (t: "credit" | "debit") => (t === "credit" ? "Credit" : "Debit
 
 function Dashboard() {
   const [show, setShow] = useState(true);
-  const { txns, balance, loading } = useTransactions(5);
+  const navigate = useNavigate();
+  const { txns, balance, loading } = useTransactions(50);
   const recent = txns.slice(0, 5);
   const balanceInt = Math.floor(balance);
   const balanceDec = (Math.abs(balance) % 1).toFixed(2).slice(1); // ".50"
@@ -116,7 +119,7 @@ function Dashboard() {
                     className="border-b border-border/60 last:border-0 hover:bg-secondary/30"
                   >
                     <td className="py-3 text-foreground">{fmtDate(t.created_at)}</td>
-                    <td className="py-3 text-foreground">{t.description || t.sender_name || "—"}</td>
+                    <td className="py-3 text-foreground">{formatDescription(t)}</td>
                     <td className="py-3 text-muted-foreground">{labelType(t.type)}</td>
                     <td className="py-3 text-right font-medium text-foreground tabular-nums">
                       {t.type === "debit" ? "-" : "+"}{fmt(t.amount)}
@@ -152,12 +155,12 @@ function Dashboard() {
           </select>
           <div className="grid grid-cols-2 gap-3">
             {[
-              { Icon: FileType, label: "PDF", sub: "Download PDF" },
-              { Icon: Eye, label: "View Statement", sub: "View Online" },
-              { Icon: FileText, label: "CSV", sub: "Download CSV" },
-              { Icon: MonitorPlay, label: "View Online", sub: "View Statement" },
-            ].map(({ Icon, label, sub }) => (
-              <button key={label} className="flex items-center gap-2 p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-accent/40 transition text-left">
+              { Icon: FileType, label: "PDF", sub: "Download PDF", onClick: () => downloadStatementPdf(recent, balance) },
+              { Icon: Eye, label: "View Statement", sub: "View Online", onClick: () => navigate({ to: "/transactions" }) },
+              { Icon: FileText, label: "CSV", sub: "Download CSV", onClick: () => downloadStatementCsv(recent) },
+              { Icon: MonitorPlay, label: "View Online", sub: "View Statement", onClick: () => navigate({ to: "/transactions" }) },
+            ].map(({ Icon, label, sub, onClick }) => (
+              <button key={label} onClick={onClick} className="flex items-center gap-2 p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-accent/40 transition text-left">
                 <Icon className="w-5 h-5 text-primary" />
                 <div><div className="text-xs font-semibold">{label}</div><div className="text-[10px] text-muted-foreground">{sub}</div></div>
               </button>

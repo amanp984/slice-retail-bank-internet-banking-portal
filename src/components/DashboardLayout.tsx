@@ -88,12 +88,23 @@ export function DashboardLayout({
   const [modal, setModal] = useState<ModalKind>(null);
   const [openPanel, setOpenPanel] = useState<null | "messages" | "notifs">(null);
   const [readSet, setReadSet] = useState<Set<number>>(new Set());
+  const [lastLogin, setLastLogin] = useState<string>("");
   const unread = notifs.filter((_, i) => !readSet.has(i) && notifs[i].unread).length;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (!sessionStorage.getItem("slice_auth")) {
       navigate({ to: "/" });
+      return;
+    }
+    const iso =
+      sessionStorage.getItem("slice_login_at") ||
+      localStorage.getItem("slice_last_login_at");
+    if (iso) {
+      const d = new Date(iso);
+      const date = d.toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
+      const time = d.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", hour12: true });
+      setLastLogin(`${date}, ${time}`);
     }
   }, [navigate]);
 
@@ -139,7 +150,7 @@ export function DashboardLayout({
             {showGreeting && (
               <>
                 <h1 className="text-2xl font-bold text-foreground">Hello, Rambabu Prajapati</h1>
-                <p className="text-sm text-muted-foreground mt-1">Last login: 25 December 2025, 09:15 AM</p>
+                <p className="text-sm text-muted-foreground mt-1">Last login: {lastLogin || "—"}</p>
               </>
             )}
           </div>

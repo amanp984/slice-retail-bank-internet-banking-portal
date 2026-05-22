@@ -7,6 +7,10 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { useTransactions } from "@/hooks/useTransactions";
+
+const fmtINR = (n: number) =>
+  "₹" + new Intl.NumberFormat("en-IN", { minimumFractionDigits: 2 }).format(Math.abs(n));
 
 export const Route = createFileRoute("/transfers/")({
   head: () => ({
@@ -39,6 +43,7 @@ function TransfersPage() {
   const [beneficiary, setBeneficiary] = useState<typeof savedBeneficiaries[number] | null>(null);
   const [dropOpen, setDropOpen] = useState(false);
   const dropRef = useRef<HTMLDivElement>(null);
+  const { balance } = useTransactions(50);
 
   useEffect(() => {
     if (!dropOpen) return;
@@ -80,7 +85,7 @@ function TransfersPage() {
                 </div>
                 <div className="text-right">
                   <div className="text-xs text-muted-foreground">Available Balance</div>
-                  <div className="font-semibold">₹1,24,560.00</div>
+                  <div className="font-semibold">{fmtINR(balance)}</div>
                 </div>
                 <ChevronDown className="w-4 h-4 text-muted-foreground" />
               </div>

@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, Search, Download } from "lucide-react";
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTransactions } from "@/hooks/useTransactions";
+import { formatDescription } from "@/lib/formatTxn";
 
 export const Route = createFileRoute("/transactions")({
   head: () => ({ meta: [{ title: "Transaction History — Slice Bank" }] }),
@@ -26,8 +27,9 @@ function TransactionsPage() {
     () =>
       txns.filter((t) => {
         const s = q.toLowerCase();
+        const desc = formatDescription(t).toLowerCase();
         return (
-          (t.description ?? "").toLowerCase().includes(s) ||
+          desc.includes(s) ||
           (t.sender_name ?? "").toLowerCase().includes(s) ||
           t.type.includes(s)
         );
@@ -89,7 +91,7 @@ function TransactionsPage() {
                     className="border-b border-border/60 last:border-0 hover:bg-secondary/30"
                   >
                     <td className="py-3 text-foreground whitespace-nowrap">{fmtDate(t.created_at)}</td>
-                    <td className="py-3 text-foreground">{t.description || t.sender_name || "—"}</td>
+                    <td className="py-3 text-foreground">{formatDescription(t)}</td>
                     <td className="py-3 text-muted-foreground">{t.type === "credit" ? "Credit" : "Debit"}</td>
                     <td className="py-3 text-right font-medium text-foreground tabular-nums">
                       {t.type === "debit" ? "-" : "+"}{fmt(t.amount)}

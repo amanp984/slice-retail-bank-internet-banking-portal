@@ -7,6 +7,10 @@ import {
   Landmark, FileText, Download, Users, Gauge, ShieldCheck, Headphones,
   Info, ChevronRight, ArrowRight,
 } from "lucide-react";
+import { useTransactions } from "@/hooks/useTransactions";
+
+const fmtINR = (n: number) =>
+  "₹" + new Intl.NumberFormat("en-IN", { minimumFractionDigits: 2 }).format(Math.abs(n));
 
 export const Route = createFileRoute("/accounts")({
   head: () => ({
@@ -83,8 +87,10 @@ function AccountsPage() {
   const [active, setActive] = useState<TabKey>("current");
   const [modal, setModal] = useState<null | "fd" | "loan" | "invest">(null);
   const [toast, setToast] = useState<string | null>(null);
+  const { balance } = useTransactions(50);
 
-  const data = accountData[active === "loan" || active === "savings" ? "current" : active];
+  const baseData = accountData[active === "loan" || active === "savings" ? "current" : active];
+  const data = active === "current" ? { ...baseData, balance: fmtINR(balance) } : baseData;
 
   const showToast = (msg: string) => {
     setToast(msg);
